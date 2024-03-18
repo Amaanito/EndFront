@@ -73,7 +73,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   
         React.useEffect(() => {
           
-          fetch('items.json')
+          fetch('/items.json')
             .then(response => response.json())
             .then(data => setProducts(data))
             .catch(error => console.error('Error fetching data:', error));
