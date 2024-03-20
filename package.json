@@ -1,18 +1,36 @@
 {
   "name": "endfront",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Webshop with different products",
+  "main": "webShop.html",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "vitest"
   },
+  "repository": {
+    "type": "git",
+    "url": "FrontEndWeb"
+  },
+  "keywords": [
+    "Webshop",
+    "Products",
+    "Items"
+  ],
+  "author": "Ali M, Amaan, Haashir, Sofian, Ali HK",
+  "license": "ISC",
   "dependencies": {
     "netlify-cli": "^17.19.1",
     "react": "^18.2.0",
-    "react-dom": "^18.2.0"
+    "react-dom": "^18.2.0",
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@testing-library/user-event": "^14.5.2",
+    "jsdom": "^24.0.0"
   },
   "devDependencies": {
     "@types/react": "^18.2.56",
@@ -24,6 +42,8 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-react-refresh": "^0.4.5",
     "typescript": "^5.2.2",
-    "vite": "^5.1.4"
+    "vite": "^5.1.4",
+    "vitest": "^1.3.1"
   }
 }
+
