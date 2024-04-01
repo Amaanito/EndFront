@@ -1,28 +1,21 @@
 import React from 'react';
 
 export function ProductList({ products, addToCart, upsellNotification }) {
-  const columnWidth = 'calc(100% / 7 - 20px)'; // Beregn bredden af hver kolonne
-  const marginRight = '20px'; // Margen til højre for hver kolonne
-
   return (
-    <div 
-    style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
-      {products.map((product, index) => (
-        <div key={product.id} 
-        style={{ width: columnWidth, marginBottom: '30px', marginRight: index % 7 === 6 ? 0 : marginRight }}>
-          <div style={{ border: '3px solid #ccc', padding: '10px' }}>
-
-            <div>{product.name} - {product.price} DKK</div>
-            <button style={{ marginTop: '10px' }} onClick={() => addToCart(product.id)}>Add to Cart</button>
-            {product.upsellProductId && (
-              <button style={{ marginTop: '10px' }} onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button>
-            )}
-          </div>
-        </div>
+    <ul>
+      {products.map(product => (
+        <li key={product.id}>
+          {product.name} - {product.price} DKK
+          <button onClick={() => addToCart(product.id)}>Add to Cart</button>
+          {product.upsellProductId && (
+            <button onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button> 
+          )}
+        </li>
       ))}
-    </div>
+    </ul>
   );
 }
+
 
 
   
@@ -77,19 +70,20 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           companyName: '',
           vatNumber: '',
         });
-      
+  
         React.useEffect(() => {
-          fetch('/items.json')
+          
+          fetch('items.json')
             .then(response => response.json())
             .then(data => setProducts(data))
             .catch(error => console.error('Error fetching data:', error));
         }, []);
-      
+  
         const addToCart = (productId) => {
           const productToAdd = products.find(product => product.id === productId);
           const existingCartItem = cart.find(item => item.id === productId);
           let newCart;
-      
+  
           if (existingCartItem) {
             newCart = cart.map(item =>
               item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
@@ -97,11 +91,11 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           } else {
             newCart = [...cart, { ...productToAdd, quantity: 1 }];
           }
-      
+  
           setCart(newCart);
           setTotalPrice(calculateTotalPrice(newCart));
         };
-      
+  
         const removeFromCart = (productId) => {
           const newCart = cart.reduce((acc, item) => {
             if (item.id === productId) {
@@ -113,11 +107,11 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             }
             return acc;
           }, []);
-      
+  
           setCart(newCart);
           setTotalPrice(calculateTotalPrice(newCart));
         };
-      
+  
         const calculateTotalPrice = (cart) => {
           let totalPrice = 0;
           cart.forEach(item => {
@@ -127,19 +121,19 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             }
             totalPrice += itemTotal;
           });
-      
+  
           if (totalPrice > 300) {
             totalPrice *= 0.9; // Apply 10% discount for orders over 300 DKK
           }
-      
+  
           return totalPrice;
         };
-      
+  
         const upsellNotification = (upsellProductId) => {
           const upsellProduct = products.find(product => product.id === upsellProductId);
           alert(`Overvej også ${upsellProduct.name} til ${upsellProduct.price} DKK for en bedre værdi!`);
         };
-      
+  
         const handleInputChange = (e) => {
           const { name, value } = e.target;
           setDeliveryAddress({
@@ -147,83 +141,35 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             [name]: value,
           });
         };
-      
+  
         const handleSubmit = (e) => {
           e.preventDefault();
           console.log('Submitted address:', deliveryAddress);
         };
-      
+  
         return (
           <div>
             <h1>Products</h1>
             <ProductList products={products} addToCart={addToCart} upsellNotification={upsellNotification} />
-
-            <h2>
-            <img src="AA/kurv.jpg"  style={{ marginRight: '10px' }} />
-              Shopping Cart
-              </h2>
-            
+            <h2>Shopping Cart</h2>
             <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
             <p>Total Price: <span>{totalPrice.toFixed(2)} DKK</span></p>
-
-            <div>
-
-              <h2 
-              >Leverings- og faktureringsadresse
-              </h2>
-
-             </div>
             
-        
-
-            
+            <h2>Leverings- og faktureringsadresse</h2>
             <form onSubmit={handleSubmit}>
-              <div>
-                <input type="text" name="name" placeholder="Navn" required value={deliveryAddress.name} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="text" name="phone" placeholder="Telefon" required value={deliveryAddress.phone} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="text" name="addressLine1" placeholder="Adresse linje 1" required value={deliveryAddress.addressLine1} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="text" name="addressLine2" placeholder="Adresse linje 2" value={deliveryAddress.addressLine2} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="text" name="zipCode" placeholder="Postnummer" required value={deliveryAddress.zipCode} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="text" name="city" placeholder="By" required value={deliveryAddress.city} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="text" name="country" placeholder="Land" required value={deliveryAddress.country} onChange={handleInputChange} disabled />
-              </div>
-
-              <div>
-                <input type="text" name="companyName" placeholder="Firmanavn" value={deliveryAddress.companyName} onChange={handleInputChange} />
-              </div>
-
-              <div>
-                <input type="text" name="vatNumber" placeholder="CVR-nummer" value={deliveryAddress.vatNumber} onChange={handleInputChange} />
-                </div>
-      <div 
-      style={{textAlign: 'right', marginRight: '250px', marginTop: '25px'}}> {/* Justér til højre */}
-        <button type="submit">Send</button>
-      </div>
-
-    </form>
-  </div>
-);
+              <input type="text" name="name" placeholder="Navn" required value={deliveryAddress.name} onChange={handleInputChange} />
+              <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange} />
+              <input type="text" name="phone" placeholder="Telefon" required value={deliveryAddress.phone} onChange={handleInputChange} />
+              <input type="text" name="addressLine1" placeholder="Adresse linje 1" required value={deliveryAddress.addressLine1} onChange={handleInputChange} />
+              <input type="text" name="addressLine2" placeholder="Adresse linje 2" value={deliveryAddress.addressLine2} onChange={handleInputChange} />
+              <input type="text" name="zipCode" placeholder="Postnummer" required value={deliveryAddress.zipCode} onChange={handleInputChange} />
+              <input type="text" name="city" placeholder="By" required value={deliveryAddress.city} onChange={handleInputChange} />
+              <input type="text" name="country" placeholder="Land" required value={deliveryAddress.country} onChange={handleInputChange} disabled />
+              <input type="text" name="companyName" placeholder="Firmanavn" value={deliveryAddress.companyName} onChange={handleInputChange} />
+              <input type="text" name="vatNumber" placeholder="CVR-nummer" value={deliveryAddress.vatNumber} onChange={handleInputChange} />
+              <button type="submit">Send</button>
+            </form>
+          </div>
+        );
       }
-      
+   
