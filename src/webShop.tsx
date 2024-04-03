@@ -1,26 +1,43 @@
 import React from 'react';
 
 export function ProductList({ products, addToCart, upsellNotification }) {
-  const columnWidth = 'calc(100% / 4 - 20px)';
+  const numProductsPerRow = 4; // Antal produkter pr. række
+  const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
   const marginRight = '20px';
+  const productHeight = '575px'; // Specifik højde til produktbjælkerne
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+    <div 
+      style={{ 
+        display: 'flex', 
+        flexWrap: 'wrap', 
+        justifyContent: 'space-between', 
+        alignItems: 'stretch' // Udvider bjælkerne til at fylde deres forældres højde
+      }}
+    >
       {products.map((product, index) => (
-
         <div 
-        key={product.id} style={{ width: columnWidth, marginBottom: '30px', marginRight: index % 4 === 3 ? 0 : marginRight }}>
-          <div style={{ border: '3px solid #ccc', padding: '20px', textAlign: 'center' }}>
-            <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{product.name}</div>
-
-            <img src={product.imageUrl} alt={product.name}
-             style={{ marginBottom: '10px', maxWidth: '100%' }} />
-
-            <div style={{ marginBottom: '10px' }}>{product.price} DKK</div>
-            <button style={{ marginTop: '10px' }} onClick={() => addToCart(product.id)}>Add to Cart</button>
-            {product.upsellProductId && (
-              <button style={{ marginTop: '10px' }} onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button>
-            )}
+          key={product.id} 
+          style={{ 
+            width: columnWidth, 
+            marginBottom: '100px', 
+            marginRight: index % numProductsPerRow === numProductsPerRow - 1 ? 0 : marginRight 
+          }}
+        >
+          <div style={{ height: productHeight }}>
+            <div style={{ border: '3px solid #ccc', padding: '20px', textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+              <div>
+                <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{product.name}</div>
+                <img src={product.imageUrl} alt={product.name} style={{ marginBottom: '10px', maxWidth: '100%', height:'350px' }} />
+                <div style={{ marginBottom: '10px' }}>{product.price} DKK</div>
+              </div>
+              <div>
+                <button style={{ marginTop: '10px' }} onClick={() => addToCart(product.id)}>Add to Cart</button>
+                {product.upsellProductId && (
+                  <button style={{ marginTop: '10px' }} onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button>
+                )}
+              </div>
+            </div>
           </div>
         </div>
       ))}
