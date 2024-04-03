@@ -25,20 +25,21 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           }}
         >
           <div style={{ height: productHeight }}>
-            <div style={{ border: '3px solid #ccc', padding: '20px', textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-              <div>
-                <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{product.name}</div>
-                <img src={product.imageUrl} alt={product.name} style={{ marginBottom: '10px', maxWidth: '100%', height:'350px' }} />
-                <div style={{ marginBottom: '10px' }}>{product.price} DKK</div>
-              </div>
-              <div>
-                <button style={{ marginTop: '10px' }} onClick={() => addToCart(product.id)}>Add to Cart</button>
-                {product.upsellProductId && (
-                  <button style={{ marginTop: '10px' }} onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button>
-                )}
-              </div>
-            </div>
-          </div>
+  <div style={{ border: '3px solid #ccc', padding: '20px', textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+    <div>
+      <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{product.name}</div>
+      <img src={product.imageUrl} alt={product.name} style={{ marginBottom: '10px', maxWidth: '100%', height:'300px' }} />
+      <div style={{ marginBottom: '10px' }}>{product.price} DKK</div>
+    </div>
+    <div>
+      <button style={{ marginTop: '10px' }} onClick={() => addToCart(product.id)}>Add to Cart</button>
+      {product.upsellProductId && (
+        <button style={{ marginTop: '10px', backgroundColor: 'green', color: 'white' }} onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button>
+      )}
+    </div>
+  </div>
+</div>
+
         </div>
       ))}
     </div>
