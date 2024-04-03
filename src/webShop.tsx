@@ -1,18 +1,22 @@
 import React from 'react';
 
 export function ProductList({ products, addToCart, upsellNotification }) {
-  const columnWidth = 'calc(100% / 7 - 20px)'; // Beregn bredden af hver kolonne
-  const marginRight = '20px'; // Margen til højre for hver kolonne
+  const columnWidth = 'calc(100% / 4 - 20px)';
+  const marginRight = '20px';
 
   return (
-    <div 
-    style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'space-between' }}>
       {products.map((product, index) => (
-        <div key={product.id} 
-        style={{ width: columnWidth, marginBottom: '30px', marginRight: index % 7 === 6 ? 0 : marginRight }}>
-          <div style={{ border: '3px solid #ccc', padding: '10px' }}>
 
-            <div>{product.name} - {product.price} DKK</div>
+        <div 
+        key={product.id} style={{ width: columnWidth, marginBottom: '30px', marginRight: index % 4 === 3 ? 0 : marginRight }}>
+          <div style={{ border: '3px solid #ccc', padding: '20px', textAlign: 'center' }}>
+            <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{product.name}</div>
+
+            <img src={product.imageUrl} alt={product.name}
+             style={{ marginBottom: '10px', maxWidth: '100%' }} />
+
+            <div style={{ marginBottom: '10px' }}>{product.price} DKK</div>
             <button style={{ marginTop: '10px' }} onClick={() => addToCart(product.id)}>Add to Cart</button>
             {product.upsellProductId && (
               <button style={{ marginTop: '10px' }} onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button>
@@ -61,6 +65,8 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           </ul>
         );
       }
+
+      
       export function App2() {
         const [products, setProducts] = React.useState([]);
         const [cart, setCart] = React.useState([]);
@@ -154,23 +160,29 @@ export function ProductList({ products, addToCart, upsellNotification }) {
         };
       
         return (
+
+
           <div>
+            
             <h1>Products</h1>
             <ProductList products={products} addToCart={addToCart} upsellNotification={upsellNotification} />
+            
 
-            <h2>
-            <img src="AA/kurv.jpg"  style={{ marginRight: '10px' }} />
-              Shopping Cart
-              </h2>
+            <img src="src/image/image.png"
+            
+            style={{ width: '1000px', height: 'auto', marginRight: '10px',  background: 'none' }} />
+            
+            <h1>Shopping Cart</h1>
             
             <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
             <p>Total Price: <span>{totalPrice.toFixed(2)} DKK</span></p>
 
             <div>
+              
 
-              <h2 
+              <h1 
               >Leverings- og faktureringsadresse
-              </h2>
+              </h1>
 
              </div>
             
@@ -178,44 +190,68 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 
             
             <form onSubmit={handleSubmit}>
+              
               <div>
-                <input type="text" name="name" placeholder="Navn" required value={deliveryAddress.name} onChange={handleInputChange} />
+                <input type="text" name="name" placeholder="Navn" required value={deliveryAddress.name} onChange={handleInputChange} 
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+                 
               </div>
 
               <div>
-                <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange} />
+                <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange}  
+                style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+        
               </div>
 
               <div>
-                <input type="text" name="phone" placeholder="Telefon" required value={deliveryAddress.phone} onChange={handleInputChange} />
+                <input type="text" name="phone" placeholder="Telefon" required value={deliveryAddress.phone} onChange={handleInputChange} 
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+                
               </div>
 
               <div>
-                <input type="text" name="addressLine1" placeholder="Adresse linje 1" required value={deliveryAddress.addressLine1} onChange={handleInputChange} />
+                <input type="text" name="addressLine1" placeholder="Adresse linje 1" required value={deliveryAddress.addressLine1} onChange={handleInputChange} 
+                
+                style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+                
+              
               </div>
 
               <div>
-                <input type="text" name="addressLine2" placeholder="Adresse linje 2" value={deliveryAddress.addressLine2} onChange={handleInputChange} />
+                <input type="text" name="addressLine2" placeholder="Adresse linje 2" value={deliveryAddress.addressLine2} onChange={handleInputChange} 
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+                
+              
               </div>
 
               <div>
-                <input type="text" name="zipCode" placeholder="Postnummer" required value={deliveryAddress.zipCode} onChange={handleInputChange} />
+                <input type="text" name="zipCode" placeholder="Postnummer" required value={deliveryAddress.zipCode} onChange={handleInputChange} 
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+
               </div>
 
               <div>
-                <input type="text" name="city" placeholder="By" required value={deliveryAddress.city} onChange={handleInputChange} />
+                <input type="text" name="city" placeholder="By" required value={deliveryAddress.city} onChange={handleInputChange}
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+
               </div>
 
               <div>
-                <input type="text" name="country" placeholder="Land" required value={deliveryAddress.country} onChange={handleInputChange} disabled />
+                <input type="text" name="country" placeholder="Land" required value={deliveryAddress.country} onChange={handleInputChange} disabled
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+
               </div>
 
               <div>
-                <input type="text" name="companyName" placeholder="Firmanavn" value={deliveryAddress.companyName} onChange={handleInputChange} />
+                <input type="text" name="companyName" placeholder="Firmanavn" value={deliveryAddress.companyName} onChange={handleInputChange}
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+
               </div>
 
               <div>
-                <input type="text" name="vatNumber" placeholder="CVR-nummer" value={deliveryAddress.vatNumber} onChange={handleInputChange} />
+                <input type="text" name="vatNumber" placeholder="CVR-nummer" value={deliveryAddress.vatNumber} onChange={handleInputChange}
+                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+
                 </div>
       <div 
       style={{textAlign: 'right', marginRight: '250px', marginTop: '25px'}}> {/* Justér til højre */}
