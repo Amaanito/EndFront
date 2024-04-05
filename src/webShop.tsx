@@ -1,10 +1,12 @@
 import React from 'react';
 
+
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4; // Antal produkter pr. række
   const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
   const marginRight = '20px';
-  const productHeight = '575px'; // Specifik højde til produktbjælkerne
+  const productHeight = '475px'; // Specifik højde til produktbjælkerne
+
 
   return (
     <div 
@@ -28,13 +30,25 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   <div style={{ border: '3px solid #ccc', padding: '20px', textAlign: 'center', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
     <div>
       <div style={{ fontWeight: 'bold', marginBottom: '10px' }}>{product.name}</div>
+
       <img src={product.imageUrl} alt={product.name} style={{ marginBottom: '10px', maxWidth: '100%', height:'300px' }} />
-      <div style={{ marginBottom: '10px' }}>{product.price} DKK</div>
+
+      <div 
+      style={{ marginBottom: '10px' }}>{product.price} DKK</div>
     </div>
+
+
     <div>
-      <button style={{ marginTop: '10px' }} onClick={() => addToCart(product.id)}>Add to Cart</button>
+      <button 
+      style={{ marginTop: '10px', backgroundColor: 'orange' }} onClick={() => addToCart(product.id)}
+      >Add to Cart
+      </button>
+
       {product.upsellProductId && (
-        <button style={{ marginTop: '10px', backgroundColor: 'green', color: 'white' }} onClick={() => upsellNotification(product.upsellProductId)}>Se dyre alternativ</button>
+
+        <button style={{ marginTop: '10px', backgroundColor: 'black', color: 'white' }} onClick={() => upsellNotification(product.upsellProductId)}>
+          Se alternativ 
+          </button>
       )}
     </div>
   </div>
@@ -62,7 +76,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
         {/* Tilføjelse af prisoplysning pr. enhed */}
         <p>Price per item: {item.price} DKK</p>
         {/* Viser totalprisen for alle enheder af denne vare */}
-        <p>Total price: {item.price * item.quantity} DKK</p>
+        <p>Total price of this product: {item.price * item.quantity} DKK</p>
       </li>
     );
   }
@@ -73,7 +87,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   */
   export function ShoppingCart({ cart, removeFromCart }) {
    if (cart.length=== 0){
-    return <p> Din Indskøbsvogn er tom</p>
+    return <h3> Din Indskøbsvogn er tom</h3>
         }
     return (
       <ul>
@@ -86,6 +100,8 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 
       
       export function App2() {
+      
+    
         const [products, setProducts] = React.useState([]);
         const [cart, setCart] = React.useState([]);
         const [totalPrice, setTotalPrice] = React.useState(0);
@@ -115,9 +131,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           let newCart;
       
           if (existingCartItem) {
-            newCart = cart.map(item =>
-              item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-            );
+            newCart = cart.map(item => item.id === productId ? { ...item, quantity: item.quantity + 1 } : item);
           } else {
             newCart = [...cart, { ...productToAdd, quantity: 1 }];
           }
@@ -166,10 +180,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       
         const handleInputChange = (e) => {
           const { name, value } = e.target;
-          setDeliveryAddress({
-            ...deliveryAddress,
-            [name]: value,
-          });
+          setDeliveryAddress({ ...deliveryAddress, [name]: value });
         };
       
         const handleSubmit = (e) => {
@@ -177,36 +188,40 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           console.log('Submitted address:', deliveryAddress);
         };
       
+        const scrollToShoppingCart = () => {
+          document.getElementById('shopping-cart').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+      
         return (
 
+          <div style={{ margin: -40 }}>
+            <h1 style={{ maxWidth: '100%', height: '70px', backgroundColor: 'White', margin: 0 }}>
+           
+              <img src="src/image/image.png"
+               style={{ width: '50px', height: 'auto', marginLeft: '1275px', marginTop: '15px', background: 'none', cursor: 'pointer' }} 
+                onClick={scrollToShoppingCart} />
+            </h1>
 
-          <div>
+            
             
             <h1>Products</h1>
             <ProductList products={products} addToCart={addToCart} upsellNotification={upsellNotification} />
-            
-
+      
             <img src="src/image/image.png"
-            
-            style={{ width: '1000px', height: 'auto', marginRight: '10px',  background: 'none' }} />
-            
-            <h1>Shopping Cart</h1>
-            
+               style={{ width: '75px', height: 'auto',  marginTop: '30px', background: 'none' }}  />
+
+            <h1 id="shopping-cart">Shopping Cart</h1>
+        
             <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
-            <p>Total Price: <span>{totalPrice.toFixed(2)} DKK</span></p>
-
+            <h3>Total Price: <span>{totalPrice.toFixed(2)} DKK</span></h3>
+         
             <div>
-              
-
-              <h1 
-              >Leverings- og faktureringsadresse
-              </h1>
-
-             </div>
+           
+              <h1>Leverings- og faktureringsadresse</h1>
+            </div>
+      
             
         
-
-            
             <form onSubmit={handleSubmit}>
               
               <div>
@@ -270,14 +285,25 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                 <input type="text" name="vatNumber" placeholder="CVR-nummer" value={deliveryAddress.vatNumber} onChange={handleInputChange}
                  style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
 
+               
                 </div>
-      <div 
-      style={{textAlign: 'right', marginRight: '250px', marginTop: '25px'}}> {/* Justér til højre */}
-        <button type="submit">Send</button>
-      </div>
 
-    </form>
-  </div>
-);
-      }
+
+                <div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
+
+          <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}
+          >Next </button>
+
+        </div>
+      </form>
       
+    </div>
+    
+
+   
+
+    
+  );
+}
+
+export default App2;
