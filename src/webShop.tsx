@@ -137,8 +137,42 @@ export function ShoppingCart({ cart, removeFromCart }) {
   
         const handleSubmit = (e) => {
           e.preventDefault();
-          console.log('Submitted address:', deliveryAddress);
+          const formData = {
+            name: deliveryAddress.name,
+            email: deliveryAddress.email,
+            phone: deliveryAddress.phone,
+            addressLine1: deliveryAddress.addressLine1,
+            addressLine2: deliveryAddress.addressLine2,
+            zipCode: deliveryAddress.zipCode,
+            city: deliveryAddress.city,
+            country: deliveryAddress.country,
+            companyName: deliveryAddress.companyName,
+            vatNumber: deliveryAddress.vatNumber
+          };
+        
+          const headers = new Headers();
+          headers.append("Content-Type", "application/json");
+        
+          const options = {
+            method: "POST",
+            headers,
+            body: JSON.stringify(formData),
+          };
+          
+        
+          fetch("https://eonz7flpdjy1og5.m.pipedream.net", options)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              console.log('Data sent successfully');
+            })
+            .catch(error => {
+              console.error('There was a problem with sending data:', error);
+            });
         };
+        
+        
   
         return (
           <div>
@@ -150,7 +184,7 @@ export function ShoppingCart({ cart, removeFromCart }) {
             
             <h2>Leverings- og faktureringsadresse</h2>
             <form onSubmit={handleSubmit}>
-              <input type="text" name="name" placeholder="Navn" required value={deliveryAddress.name} onChange={handleInputChange} />
+              <input type="text" name="name" placeholder="Navn" required value = {deliveryAddress.name} onChange={handleInputChange} />
               <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange} />
               <input type="text" name="phone" placeholder="Telefon" required value={deliveryAddress.phone} onChange={handleInputChange} />
               <input type="text" name="addressLine1" placeholder="Adresse linje 1" required value={deliveryAddress.addressLine1} onChange={handleInputChange} />
@@ -165,4 +199,4 @@ export function ShoppingCart({ cart, removeFromCart }) {
           </div>
         );
       }
-   
+    
