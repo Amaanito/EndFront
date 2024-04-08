@@ -202,7 +202,12 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             city: deliveryAddress.city,
             country: deliveryAddress.country,
             companyName: deliveryAddress.companyName,
-            vatNumber: deliveryAddress.vatNumber
+            vatNumber: deliveryAddress.vatNumber,
+            orderComment: e.target.orderComment.value,
+            cart,
+            totalPrice,
+            termsAccepted,
+            receiveMarketing
           };
         
           const headers = new Headers();
