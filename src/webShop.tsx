@@ -190,7 +190,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           setDeliveryAddress({ ...deliveryAddress, [name]: value });
         };
       
-        const handleSubmit = (e) => {
+        const handleSubmit = async (e) => {
           e.preventDefault();
           const formData = {
             name: deliveryAddress.name,
@@ -209,27 +209,22 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             termsAccepted,
             receiveMarketing
           };
-        
-          const headers = new Headers();
-          headers.append("Content-Type", "application/json");
-        
-          const options = {
-            method: "POST",
-            headers,
-            body: JSON.stringify(formData),
-          };
-          
-        
-          fetch("https://eonz7flpdjy1og5.m.pipedream.net", options)
-            .then(response => {
-              if (!response.ok) {
-                throw new Error('Network response was not ok');
+            try {
+              const response = await fetch("https://eonz7flpdjy1og5.m.pipedream.net", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+              });
+              if (response.ok) {
+                console.log('Order submitted successfully!');
+              } else {
+                console.error('Order submission failed!');
               }
-              console.log('Data sent successfully');
-            })
-            .catch(error => {
+            } catch (error) {
               console.error('There was a problem with sending data:', error);
-            });
+            }
         };
       
         const scrollToShoppingCart = () => {
