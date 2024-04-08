@@ -102,10 +102,14 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       export function App2() {
       
     
+        const [termsAccepted, setTermsAccepted] = React.useState(false);
+        const [receiveMarketing, setReceiveMarketing] = React.useState(false);
         const [products, setProducts] = React.useState([]);
         const [cart, setCart] = React.useState([]);
         const [totalPrice, setTotalPrice] = React.useState(0);
         const [deliveryAddress, setDeliveryAddress] = React.useState({
+
+          
           name: '',
           email: '',
           phone: '',
@@ -135,6 +139,13 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           } else {
             newCart = [...cart, { ...productToAdd, quantity: 1 }];
           }
+
+          const handleSubmit = (e) => {
+            e.preventDefault();
+            console.log('Submitted address:', deliveryAddress);
+            console.log('Order comment:', orderComment);
+            
+          };
       
           setCart(newCart);
           setTotalPrice(calculateTotalPrice(newCart));
@@ -198,7 +209,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             <h1 style={{ maxWidth: '100%', height: '70px', backgroundColor: 'White', margin: 0 }}>
            
               <img src="src/image/image.png"
-               style={{ width: '50px', height: 'auto', marginLeft: '1275px', marginTop: '15px', background: 'none', cursor: 'pointer' }} 
+               style={{ width: '50px', height: 'auto', marginLeft: '1150px', marginTop: '15px', background: 'none', cursor: 'pointer' }} 
                 onClick={scrollToShoppingCart} />
             </h1>
 
@@ -293,6 +304,30 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 
           <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}
           >Next </button>
+
+
+          {/* Accept terms */}
+        <div>
+          <input
+            type="checkbox"
+            id="terms"
+            checked={termsAccepted}
+            onChange={(e) => setTermsAccepted(e.target.checked)}
+          />
+          <label htmlFor="terms">Jeg accepterer vilkår og betingelser</label>
+        </div>
+        
+        {/* Marketing */}
+        <div>
+          <input
+            type="checkbox"
+            id="marketing"
+            checked={receiveMarketing}
+            onChange={(e) => setReceiveMarketing(e.target.checked)}
+          />
+          <label htmlFor="marketing">Jeg ønsker at modtage marketingemails</label>
+        </div>
+          
 
         </div>
       </form>
