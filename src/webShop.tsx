@@ -2,7 +2,6 @@ import React from 'react';
 
 
 
-
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4; // Antal produkter pr. række
   const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
@@ -142,12 +141,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             newCart = [...cart, { ...productToAdd, quantity: 1 }];
           }
 
-          const handleSubmit = (e) => {
-            e.preventDefault();
-            console.log('Submitted address:', deliveryAddress);
-      
-            
-          };
+        
       
           setCart(newCart);
           setTotalPrice(calculateTotalPrice(newCart));
