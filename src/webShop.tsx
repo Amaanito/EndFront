@@ -1,4 +1,7 @@
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import OrderConfirmation from './OrderConfirmation'; // Importer den nye komponent til ordrebekræftelse
+
 
 
 export function ProductList({ products, addToCart, upsellNotification }) {
@@ -204,8 +207,9 @@ export function ProductList({ products, addToCart, upsellNotification }) {
         };
       
         return (
-
-          <div style={{ margin: -40 }}>
+          
+      
+           <div style={{ margin: -40 }}>
             <h1 style={{ maxWidth: '100%', height: '70px', backgroundColor: 'White', margin: 0 }}>
            
               <img src="src/image/image.png"
@@ -230,6 +234,9 @@ export function ProductList({ products, addToCart, upsellNotification }) {
            
               <h1>Leverings- og faktureringsadresse</h1>
             </div>
+
+
+            
       
             
         
