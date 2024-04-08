@@ -205,7 +205,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
            <div style={{ margin: -40 }}>
             <h1 style={{ maxWidth: '100%', height: '70px', backgroundColor: 'White', margin: 0 }}>
            
-              <img src="src/image/image.png"
+              <img src="src/image/kurv.png"
                style={{ width: '50px', height: 'auto', marginLeft: '1150px', marginTop: '15px', background: 'none', cursor: 'pointer' }} 
                 onClick={scrollToShoppingCart} />
             </h1>
@@ -240,6 +240,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                  style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
                  
               </div>
+            
 
               <div>
                 <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange}  
@@ -324,8 +325,6 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           >Next </button>
 
           
-
-
 
 
           {/* Accept terms */}
