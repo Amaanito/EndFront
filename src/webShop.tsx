@@ -192,7 +192,39 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       
         const handleSubmit = (e) => {
           e.preventDefault();
-          console.log('Submitted address:', deliveryAddress);
+          const formData = {
+            name: deliveryAddress.name,
+            email: deliveryAddress.email,
+            phone: deliveryAddress.phone,
+            addressLine1: deliveryAddress.addressLine1,
+            addressLine2: deliveryAddress.addressLine2,
+            zipCode: deliveryAddress.zipCode,
+            city: deliveryAddress.city,
+            country: deliveryAddress.country,
+            companyName: deliveryAddress.companyName,
+            vatNumber: deliveryAddress.vatNumber
+          };
+        
+          const headers = new Headers();
+          headers.append("Content-Type", "application/json");
+        
+          const options = {
+            method: "POST",
+            headers,
+            body: JSON.stringify(formData),
+          };
+          
+        
+          fetch("https://eonz7flpdjy1og5.m.pipedream.net", options)
+            .then(response => {
+              if (!response.ok) {
+                throw new Error('Network response was not ok');
+              }
+              console.log('Data sent successfully');
+            })
+            .catch(error => {
+              console.error('There was a problem with sending data:', error);
+            });
         };
       
         const scrollToShoppingCart = () => {
