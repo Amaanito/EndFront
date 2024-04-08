@@ -1,6 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import OrderConfirmation from './OrderConfirmation'; // Importer den nye komponent til ordrebekræftelse
+
 
 
 
@@ -146,7 +145,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           const handleSubmit = (e) => {
             e.preventDefault();
             console.log('Submitted address:', deliveryAddress);
-            console.log('Order comment:', orderComment);
+      
             
           };
       
