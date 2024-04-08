@@ -306,11 +306,33 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                
                 </div>
 
+                
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
+
+  <label htmlFor="orderComment" style={{ alignSelf: 'center', marginBottom: '5px' }}>Kommentar til ordre:
+  </label>
+  <textarea
+    id="orderComment"
+    name="orderComment"
+    placeholder="Tilføj en kommentar til din ordre her..."
+    style={{ width: '50%', height: '100px' }} 
+  >
+
+  </textarea>
+
+
+
+</div>
+
 
                 <div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
 
           <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}
           >Next </button>
+
+          
+
+
 
 
           {/* Accept terms */}
@@ -334,6 +356,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           />
           <label htmlFor="marketing">Jeg ønsker at modtage marketingemails</label>
         </div>
+
           
 
         </div>
