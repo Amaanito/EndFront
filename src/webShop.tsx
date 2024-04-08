@@ -208,6 +208,9 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             totalPrice,
             termsAccepted,
             receiveMarketing
+
+        
+
           };
             try {
               const response = await fetch("https://eonz7flpdjy1og5.m.pipedream.net", {
@@ -218,9 +221,9 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                 body: JSON.stringify(formData)
               });
               if (response.ok) {
-                console.log('Order submitted successfully!');
+                window.alert('Order submitted successfully!'); // Ændring: Brug af window.alert for en pop op besked
               } else {
-                console.error('Order submission failed!');
+                window.alert('Order submission failed!'); // Ændring: Brug af window.alert for en pop op besked
               }
             } catch (error) {
               console.error('There was a problem with sending data:', error);
@@ -237,7 +240,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
            <div style={{ margin: -40 }}>
             <h1 style={{ maxWidth: '100%', height: '70px', backgroundColor: 'White', margin: 0 }}>
            
-              <img src="src/image/kurv.png"
+              <img src="kurv.png"
                style={{ width: '50px', height: 'auto', marginLeft: '1150px', marginTop: '15px', background: 'none', cursor: 'pointer' }} 
                 onClick={scrollToShoppingCart} />
             </h1>
@@ -247,7 +250,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             <h1>Products</h1>
             <ProductList products={products} addToCart={addToCart} upsellNotification={upsellNotification} />
       
-            <img src="src/image/image.png"
+            <img src="kurv.png"
                style={{ width: '75px', height: 'auto',  marginTop: '30px', background: 'none' }}  />
 
             <h1 id="shopping-cart">Shopping Cart</h1>
@@ -259,6 +262,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
            
               <h1>Leverings- og faktureringsadresse</h1>
             </div>
+
 
 
             
@@ -354,7 +358,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                 <div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
 
           <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}
-          >Next </button>
+          >Submit Order </button>
 
           
 
