@@ -108,6 +108,9 @@ export function ProductList({ products, addToCart, upsellNotification }) {
         const [products, setProducts] = React.useState([]);
         const [cart, setCart] = React.useState([]);
         const [totalPrice, setTotalPrice] = React.useState(0);
+        const [postnumre, setPostnumre] = React.useState([]);
+        const [isLoading, setIsLoading] = React.useState(false);
+        const [error, setError] = React.useState(null);
         const [deliveryAddress, setDeliveryAddress] = React.useState({
 
           
@@ -129,6 +132,36 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             .then(data => setProducts(data))
             .catch(error => console.error('Error fetching data:', error));
         }, []);
+
+        React.useEffect(() => {
+          fetch('https://api.dataforsyningen.dk/postnumre')
+            .then(response => response.json())
+            .then(data => {
+              setPostnumre(data);
+              setIsLoading(false);
+            })
+            .catch(error => {
+              console.error('Error fetching post codes:', error);
+              setError('Kunne ikke hente postnumre.');
+              setIsLoading(false);
+            });
+        }, []);
+          
+        
+        React.useEffect(() => {
+          setIsLoading(true); // Starter indlæsningen
+          fetch('https://api.dataforsyningen.dk/postnumre')
+            .then(response => response.json())
+            .then(data => {
+              setPostnumre(data);
+              setIsLoading(false); // Stopper indlæsningen
+            })
+            .catch(error => {
+              console.error('Error fetching post codes:', error);
+              setIsLoading(false); // Stopper indlæsningen ved fejl
+            });
+        }, []);
+        
       
         const addToCart = (productId) => {
           const productToAdd = products.find(product => product.id === productId);
@@ -187,8 +220,23 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       
         const handleInputChange = (e) => {
           const { name, value } = e.target;
-          setDeliveryAddress({ ...deliveryAddress, [name]: value });
+          
+          if (name === 'zipCode') {
+            const postNummerObj = postnumre.find(postnummer => postnummer.nr === value.split(" ")[0]);
+            setDeliveryAddress(prevState => ({
+              ...prevState,
+              zipCode: value.split(" ")[0],
+              city: postNummerObj ? postNummerObj.navn : '',
+            }));
+          } else {
+            setDeliveryAddress(prevState => ({
+              ...prevState,
+              [name]: value,
+            }));
+          }
         };
+        
+        
       
         const handleSubmit = async (e) => {
           e.preventDefault();
@@ -277,6 +325,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                  
               </div>
             
+            
 
               <div>
                 <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange}  
@@ -302,20 +351,50 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                 <input type="text" name="addressLine2" placeholder="Adresse linje 2" value={deliveryAddress.addressLine2} onChange={handleInputChange} 
                  style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
                 
+                {isLoading ? <p>Henter postnumre...</p> : <div></div>}
+
+{error && <p>{error}</p>}
               
               </div>
 
+              
+             
               <div>
-                <input type="text" name="zipCode" placeholder="Postnummer" required value={deliveryAddress.zipCode} onChange={handleInputChange} 
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
+  <select
+    name="zipCode"
+    required
+    value={deliveryAddress.zipCode}
+    onChange={handleInputChange}
+    style={{
+      width: '300px',
+      height: '20px',
+      marginBottom: '10px',
+     
+    }}
+  >
+    <option value="">Postnummer</option> {}
+    {postnumre.map((postnummer) => (
+      <option key={postnummer.nr} value={postnummer.nr}>
+        {postnummer.nr} {postnummer.navn}
+      </option>
+    ))}
+  </select>
+</div>
 
-              </div>
 
-              <div>
-                <input type="text" name="city" placeholder="By" required value={deliveryAddress.city} onChange={handleInputChange}
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
 
-              </div>
+<div>
+  <input
+    type="text"
+    name="city"
+    placeholder="By"
+    required
+    value={deliveryAddress.city}
+    readOnly // Dette felt er skrivebeskyttet, da det udfyldes automatisk
+    style={{ width: '300px', height: '20px', marginBottom: '10px' }}
+  />
+</div>
+
 
               <div>
                 <input type="text" name="country" placeholder="Land" required value={deliveryAddress.country} onChange={handleInputChange} disabled
@@ -335,6 +414,10 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 
                
                 </div>
+              
+
+              
+
 
                 
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
