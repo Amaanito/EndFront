@@ -100,7 +100,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       }
 
       
-      export function App2() {
+      export function App() {
       
     
         const [termsAccepted, setTermsAccepted] = React.useState(false);
@@ -399,4 +399,4 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   );
 }
 
-export default App2;
+export default App;

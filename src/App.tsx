@@ -1,13 +1,13 @@
 import './App.css';
-import { App2} from './webShop';
+import { App} from './webShop';
 
 
-function App() {
+function RunApp() {
   return (
     <div>
-      <App2/>
+      <App/>
 
        </div>
   );
 }
-export default App2;
+export default RunApp;
