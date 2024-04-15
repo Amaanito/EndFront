@@ -1,11 +1,11 @@
 import './App.css';
-import { App2} from './webShop';
+import  './webShop';
 
 
 function App() {
   return (
     <div>
-      <App2/>
+      <App/>
 
        </div>
   );
