@@ -240,6 +240,10 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       
         const handleSubmit = async (e) => {
           e.preventDefault();
+  if (!termsAccepted) {
+    alert("Du skal acceptere vilkår og betingelser for at fortsætte.");
+    return;
+  }
           const formData = {
             name: deliveryAddress.name,
             email: deliveryAddress.email,
