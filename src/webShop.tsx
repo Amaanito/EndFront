@@ -83,9 +83,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   }
   
   
-  /**
-  @author Haashir Khan
-  */
+  
   export function ShoppingCart({ cart, removeFromCart }) {
    if (cart.length=== 0){
     return <h3> Din Indskøbsvogn er tom</h3>
@@ -98,7 +96,11 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           </ul>
         );
       }
-
+      function getCsrfToken() {
+        const cookies = document.cookie.split('; ');
+        const csrfCookie = cookies.find(row => row.startsWith('csrftoken='));
+        return csrfCookie ? csrfCookie.split('=')[1] : null;
+      }
       
       export function App2() {
       
@@ -235,11 +237,11 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             }));
           }
         };
-        
-        
-      
         const handleSubmit = async (e) => {
           e.preventDefault();
+      
+          
+          /** 
           const formData = {
             name: deliveryAddress.name,
             email: deliveryAddress.email,
@@ -261,10 +263,13 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 
           };
             try {
-              const response = await fetch("https://eonz7flpdjy1og5.m.pipedream.net", {
+              
+              //const response = await fetch("https://eonz7flpdjy1og5.m.pipedream.net", {
+              const response = await fetch("http://127.0.0.1:8000/gem-bruger/", {
                 method: "POST",
                 headers: {
-                  "Content-Type": "application/json"
+                  "Content-Type": "application/json",
+                  //"X-CSRFToken": csrfToken,
                 },
                 body: JSON.stringify(formData)
               });
@@ -275,7 +280,41 @@ export function ProductList({ products, addToCart, upsellNotification }) {
               }
             } catch (error) {
               console.error('There was a problem with sending data:', error);
-            }
+            }*/
+            const csrfToken = getCsrfToken(); // Hent CSRF-token fra cookies
+  const formData = {
+    name: deliveryAddress.name,
+            email: deliveryAddress.email,
+            phone: deliveryAddress.phone,
+            addressLine1: deliveryAddress.addressLine1,
+            addressLine2: deliveryAddress.addressLine2,
+            zipCode: deliveryAddress.zipCode,
+            city: deliveryAddress.city,
+            country: deliveryAddress.country,
+            companyName: deliveryAddress.companyName,
+            vatNumber: deliveryAddress.vatNumber,
+            orderComment: e.target.orderComment.value,
+            cart,
+            totalPrice,
+            termsAccepted,
+            receiveMarketing
+  }; try {
+    const response = await fetch("http://127.0.0.1:8000/gem-bruger/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken, // Inkluder CSRF-token her
+      },
+      body: JSON.stringify(formData)
+    });
+    if (response.ok) {
+      window.alert('Order submitted successfully!');
+    } else {
+      window.alert('Order submission failed!');
+    }
+  } catch (error) {
+    console.error('There was a problem with sending data:', error);
+  }
         };
       
         const scrollToShoppingCart = () => {
@@ -481,5 +520,5 @@ export function ProductList({ products, addToCart, upsellNotification }) {
     
   );
 }
-
+      
 export default App2;
