@@ -1,12 +1,11 @@
 import React from 'react';
 
 
-
 export function ProductList({ products, addToCart, upsellNotification }) {
-  const numProductsPerRow = 4; // Antal produkter pr. række
+  const numProductsPerRow = 4; 
   const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
   const marginRight = '20px';
-  const productHeight = '475px'; // Specifik højde til produktbjælkerne
+  const productHeight = '475px'; 
 
 
   return (
@@ -15,7 +14,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
         display: 'flex', 
         flexWrap: 'wrap', 
         justifyContent: 'space-between', 
-        alignItems: 'stretch' // Udvider bjælkerne til at fylde deres forældres højde
+        alignItems: 'stretch' 
       }}
     >
       {products.map((product, index) => (
@@ -104,7 +103,6 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       
       export function App2() {
       
-    
         const [termsAccepted, setTermsAccepted] = React.useState(false);
         const [receiveMarketing, setReceiveMarketing] = React.useState(false);
         const [products, setProducts] = React.useState([]);
