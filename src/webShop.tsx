@@ -1,21 +1,18 @@
-import React from 'react';
-
-
+import React from "react";
 
 export function ProductList({ products, addToCart, upsellNotification }) {
-  const numProductsPerRow = 4; 
+  const numProductsPerRow = 4;
   const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
-  const marginRight = '20px';
-  const productHeight = '475px'; // Specifik højde til produktbjælkerne
-
+  const marginRight = "20px";
+  const productHeight = "475px"; // Specifik højde til produktbjælkerne
 
   return (
-    <div 
-      style={{ 
-        display: 'flex', 
-        flexWrap: 'wrap', 
-        justifyContent: 'space-between', 
-        alignItems: 'stretch' // Udvider bjælkerne til at fylde deres forældres højde
+    <div
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        justifyContent: "space-between",
+        alignItems: "stretch", // Udvider bjælkerne til at fylde deres forældres højde
       }}
     >
       {products.map((product, index) => (
@@ -89,79 +86,81 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   );
 }
 
+export function CartItem({ item, removeFromCart, updateQuantity }) {
+  return (
+    <li>
+      {item.name} - {item.price} DKK - Quantity:
+      <select
+        value={item.quantity}
+        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}
+      >
+        {/* Dropdown med antal tilføjelser */}
+        {[...Array(10).keys()].map((i) => (
+          <option key={i + 1} value={i + 1}>
+            {i + 1}
+          </option>
+        ))}
+      </select>
+      <button onClick={() => removeFromCart(item.id)}>Remove</button>
+      {/* Tilføjelse af prisoplysning pr. enhed */}
+      <p>Price per item: {item.price} DKK</p>
+      {/* Viser totalprisen for alle enheder af denne vare */}
+      <p>Total price of this product: {item.price * item.quantity} DKK</p>
+    </li>
+  );
+}
 
-  
-  export function CartItem({ item, removeFromCart, updateQuantity }) {
-    return (
-      <li>
-        {item.name} - {item.price} DKK - Quantity: 
-        <select value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}>
-          {/* Dropdown med antal tilføjelser */}
-          {[...Array(10).keys()].map(i => 
-            <option key={i + 1} value={i + 1}>{i + 1}</option>
-          )}
-        </select>
-        <button onClick={() => removeFromCart(item.id)}>Remove</button>
-        {/* Tilføjelse af prisoplysning pr. enhed */}
-        <p>Price per item: {item.price} DKK</p>
-        {/* Viser totalprisen for alle enheder af denne vare */}
-        <p>Total price of this product: {item.price * item.quantity} DKK</p>
-      </li>
-    );
+export function ShoppingCart({ cart, removeFromCart }) {
+  if (cart.length === 0) {
+    return <h3> Din Indskøbsvogn er tom</h3>;
   }
-  
-  
-  
-  export function ShoppingCart({ cart, removeFromCart }) {
-   if (cart.length=== 0){
-    return <h3> Din Indskøbsvogn er tom</h3>
-        }
-    return (
-      <ul>
-      {cart.map(item => (
-      <CartItem key={item.id} item={item} removeFromCart={removeFromCart} updateQuantity={undefined} />
-            ))}
-          </ul>
-        );
-      }
-      function getCsrfToken() {
-        const cookies = document.cookie.split('; ');
-        const csrfCookie = cookies.find(row => row.startsWith('csrftoken='));
-        return csrfCookie ? csrfCookie.split('=')[1] : null;
-      }
-      
-      export function App2() {
-      
-    
-        const [termsAccepted, setTermsAccepted] = React.useState(false);
-        const [receiveMarketing, setReceiveMarketing] = React.useState(false);
-        const [products, setProducts] = React.useState([]);
-        const [cart, setCart] = React.useState([]);
-        const [totalPrice, setTotalPrice] = React.useState(0);
-        const [postnumre, setPostnumre] = React.useState([]);
-        const [isLoading, setIsLoading] = React.useState(false);
-        const [error, setError] = React.useState(null);
-        const [deliveryAddress, setDeliveryAddress] = React.useState({
+  return (
+    <ul>
+      {cart.map((item) => (
+        <CartItem
+          key={item.id}
+          item={item}
+          removeFromCart={removeFromCart}
+          updateQuantity={undefined}
+        />
+      ))}
+    </ul>
+  );
+}
+function getCsrfToken() {
+  const cookies = document.cookie.split("; ");
+  const csrfCookie = cookies.find((row) => row.startsWith("csrftoken="));
+  return csrfCookie ? csrfCookie.split("=")[1] : null;
+}
 
-          
-          name: '',
-          email: '',
-          phone: '',
-          addressLine1: '',
-          addressLine2: '',
-          zipCode: '',
-          city: '',
-          country: 'Denmark',
-          companyName: '',
-          vatNumber: '',
-        });
-      
-        React.useEffect(() => {
-          fetch('/items.json')
-            .then(response => response.json())
-            .then(data => setProducts(data))
-            .catch(error => console.error('Error fetching data:', error));
-        }, []);
+export function App2() {
+  const [termsAccepted, setTermsAccepted] = React.useState(false);
+  const [receiveMarketing, setReceiveMarketing] = React.useState(false);
+  const [products, setProducts] = React.useState([]);
+  const [cart, setCart] = React.useState([]);
+  const [totalPrice, setTotalPrice] = React.useState(0);
+  const [postnumre, setPostnumre] = React.useState([]);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState(null);
+  const [deliveryAddress, setDeliveryAddress] = React.useState({
+    name: "",
+    email: "",
+    phone: "",
+    addressLine1: "",
+    addressLine2: "",
+    zipCode: "",
+    city: "",
+    country: "Denmark",
+    companyName: "",
+    vatNumber: "",
+  });
+
+  React.useEffect(() => {
+    fetch("/items.json")
+      .then((response) => response.json())
+      .then((data) => setProducts(data))
+      .catch((error) => console.error("Error fetching data:", error));
+  }, []);
 
   React.useEffect(() => {
     fetch("https://api.dataforsyningen.dk/postnumre")
@@ -271,10 +270,10 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Get CSRF token
     const csrfToken = getCsrfToken();
-  
+
     const billingInfo = {
       name: deliveryAddress.name,
       email: deliveryAddress.email,
@@ -292,7 +291,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       termsAccepted,
       receiveMarketing,
     };
-  
+
     try {
       const response = await fetch("http://localhost:8000/billing", {
         method: "POST",
@@ -302,7 +301,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
         },
         body: JSON.stringify(billingInfo),
       });
-  
+
       if (response.ok) {
         window.alert("Order submitted successfully!");
       } else {
@@ -312,7 +311,6 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       console.error("There was a problem with sending data:", error);
     }
   };
-  
 
   const scrollToShoppingCart = () => {
     document
