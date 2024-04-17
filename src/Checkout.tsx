@@ -30,7 +30,13 @@ const Checkout = () => {
 
   return (
     <div>
-    <div>
+      
+      <div 
+      style={{ margin: -150 }}>
+            
+              </div>
+              
+              <div>
            
            <h1>Leverings- og faktureringsadresse</h1>
          </div>
