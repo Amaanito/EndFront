@@ -1,27 +1,38 @@
 import './App.css';
-import { App} from './webShop';
 import{BrowserRouter as Router,Route,Switch} from 'react-router-dom';
+import { App} from './webShop';
+import Payment from './Payment';
 import Confirm from './Confirm';
+import Checkout from './Checkout';
 
 function RunApp() {
 
   return (
-    <Router>
-       <div>
-        <App/>
+      <Router>
         <Switch>
-            <Route exact path='/'>
-            </Route>
 
-            <Route path="/confirm">
-              <Confirm/>
+          <Route exact path="/">
+            <App />
+          </Route>
 
-            </Route>
-          </Switch>
-        </div>
-        
 
-    </Router>
+          <Route path="/checkout">
+            <Checkout />
+          </Route>
+
+
+          <Route path="/payment">
+            <Payment />
+          </Route>
+
+      
+
+          <Route path="/confirm">
+            <Confirm />
+          </Route>
+
+        </Switch>
+      </Router>
   );
 }
 export default RunApp;
