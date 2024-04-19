@@ -11,9 +11,11 @@
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -40,6 +42,7 @@
 .read-the-docs {
   color: #888;
 }
+
 /* Baseline styles */
 body {
   font-family: 'Arial', sans-serif;
@@ -110,7 +113,7 @@ body {
   border: none;
   padding: 0.5rem 1rem;
   border-radius: 4px;
-  font-size: 1rem;
+  font-size: 0.8rem; /* Gjort mindre */
 }
 
 .remove-button:hover {
@@ -124,4 +127,15 @@ body {
   margin-top: 0.5rem;
 }
 
-/* Hvis yderligere layout eller elementer er nødvendige, f.eks. en sidebjælke til indkøbskurvssammenfatning, vil de kræve yderligere styling. */
+.cart-item-discount {
+  color: #ff8c00; /* Stærk orange farve for rabatten */
+  font-size: 1.0rem; /* Forstørret skrift for rabatten */
+  margin-top: 1rem; /* Justeret så rabatten ligger lavere */
+  margin-bottom: -0.5rem; /* Trækker den op tættere på den totale pris, hvis nødvendig */
+}
+
+.cart-item-final-total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-top: 0.25rem;
+}

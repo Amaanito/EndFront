@@ -63,35 +63,47 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 
   
 export function CartItem({ item, removeFromCart, updateQuantity }) {
-  const totalPrice = item.price * item.quantity; // Beregn totalprisen for denne linje
+  const itemTotal = item.price * item.quantity;
+  let itemDiscount = 0;
+
+  if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
+    itemDiscount = itemTotal * (item.rebatePercent / 100);
+  }
+
+  const itemFinalTotal = itemTotal - itemDiscount;
 
   return (
     <div className="cart-item">
       <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
-      <div className="cart-item-details">
-        <div className="cart-item-description">
-          <span className="cart-item-name">{item.name}</span>
-          {/* Inkluder andre detaljer som varenummer og farve, hvis det er nødvendigt */}
-        </div>
-        <div className="cart-item-price">{item.price.toFixed(2)} kr.</div>
-        <div>
-          {/* Antal selektor */}
-          <select className="quantity-select" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}>
+      <div className="cart-item-info">
+        <h3 className="cart-item-title">{item.name}</h3>
+        <p className="cart-item-price">Pris: {item.price.toFixed(2)} kr.</p>
+        <div className="cart-item-quantity">
+          Antal:
+          <select 
+            className="quantity-select" 
+            value={item.quantity} 
+            onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}
+          >
             {[...Array(10).keys()].map(i => (
               <option key={i + 1} value={i + 1}>{i + 1}</option>
             ))}
           </select>
-          {/* Fjern-knap */}
-          <button className="remove-button" onClick={() => removeFromCart(item.id)}>Fjern</button>
         </div>
-        <div className="total-price">{totalPrice.toFixed(2)} kr.</div>
+        {itemDiscount > 0 && (
+          <p className="cart-item-discount">Rabat: -{itemDiscount.toFixed(2)} kr.</p>
+        )}
+        <p className="cart-item-total-price">Total: {itemFinalTotal.toFixed(2)} kr.</p>
+        <button className="remove-button" onClick={() => removeFromCart(item.id)}>
+          Fjern
+        </button>
       </div>
     </div>
   );
 }
 
 
-  
+
   
   export function ShoppingCart({ cart, removeFromCart }) {
    if (cart.length=== 0){
@@ -222,6 +234,8 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
       
           return totalPrice;
         };
+
+        
       
         const upsellNotification = (upsellProductId) => {
           const upsellProduct = products.find(product => product.id === upsellProductId);
