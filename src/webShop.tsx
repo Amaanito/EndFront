@@ -62,25 +62,35 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 
 
   
-  export function CartItem({ item, removeFromCart, updateQuantity }) {
-    return (
-      <li>
-        {item.name} - {item.price} DKK - Quantity: 
-        <select value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}>
-          {/* Dropdown med antal tilføjelser */}
-          {[...Array(10).keys()].map(i => 
-            <option key={i + 1} value={i + 1}>{i + 1}</option>
-          )}
-        </select>
-        <button onClick={() => removeFromCart(item.id)}>Remove</button>
-        {/* Tilføjelse af prisoplysning pr. enhed */}
-        <p>Price per item: {item.price} DKK</p>
-        {/* Viser totalprisen for alle enheder af denne vare */}
-        <p>Total price of this product: {item.price * item.quantity} DKK</p>
-      </li>
-    );
-  }
-  
+export function CartItem({ item, removeFromCart, updateQuantity }) {
+  const totalPrice = item.price * item.quantity; // Beregn totalprisen for denne linje
+
+  return (
+    <div className="cart-item">
+      <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
+      <div className="cart-item-details">
+        <div className="cart-item-description">
+          <span className="cart-item-name">{item.name}</span>
+          {/* Inkluder andre detaljer som varenummer og farve, hvis det er nødvendigt */}
+        </div>
+        <div className="cart-item-price">{item.price.toFixed(2)} kr.</div>
+        <div>
+          {/* Antal selektor */}
+          <select className="quantity-select" value={item.quantity} onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}>
+            {[...Array(10).keys()].map(i => (
+              <option key={i + 1} value={i + 1}>{i + 1}</option>
+            ))}
+          </select>
+          {/* Fjern-knap */}
+          <button className="remove-button" onClick={() => removeFromCart(item.id)}>Fjern</button>
+        </div>
+        <div className="total-price">{totalPrice.toFixed(2)} kr.</div>
+      </div>
+    </div>
+  );
+}
+
+
   
   
   export function ShoppingCart({ cart, removeFromCart }) {
