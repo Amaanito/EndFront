@@ -434,6 +434,17 @@ export function App2() {
           {error && <p>{error}</p>}
         </div>
 
+        <label htmlFor="name">Navn</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    placeholder="Navn"
+    required
+    value={deliveryAddress.name}
+    onChange={handleInputChange}
+    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+  />
         <div>
           <select
             name="zipCode"
@@ -490,6 +501,7 @@ export function App2() {
             style={{ width: "300px", height: "20px", marginBottom: "10px" }}
           />
         </div>
+        
 
         <div>
           <input

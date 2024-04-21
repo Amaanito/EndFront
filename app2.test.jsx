@@ -1,22 +1,26 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import App2 from "./webShop";
+import { describe, test, expect } from 'vitest'
 
-describe("App2", () => {
-  test("submitting the form triggers handleSubmit", async () => {
-    globalThis.fetch = jest.fn(() =>
+
+
+describe('App2', () => {
+  test('submitting the form triggers handleSubmit', async () => {
+    global.fetch = jest.fn().mockImplementation(() =>
       Promise.resolve({
         ok: true,
-        json: () =>
-          Promise.resolve({ message: "Order submitted successfully!" }),
+        json: () => Promise.resolve({ message: 'Order submitted successfully!' }),
       })
     );
 
     render(<App2 />);
 
-
-    fireEvent.change(screen.getByLabelText(/Navn/), {
-      target: { value: "John Doe" },
-    });
+  
+  });
+});
+fireEvent.change(screen.getByLabelText('Navn'), {
+  target: { value: 'John Doe' },
+});
     fireEvent.change(screen.getByLabelText(/Email/), {
       target: { value: "john@example.com" },
     });
@@ -72,5 +76,4 @@ describe("App2", () => {
         }),
       }
     );
-  });
-});
+
