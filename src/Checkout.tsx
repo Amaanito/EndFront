@@ -121,17 +121,25 @@ const Checkout = () => {
 >
 
 </textarea>
+
 </div>
 
 
-             <div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
 
-             <Link to="/payment">
-         <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}>Save and Continue</button>
+<div style={{ textAlign: 'center' }}>
+  <Link to= "/" >
+     <button style={{ backgroundColor: 'red', color: 'white', width: '125px', marginTop: '10px' }}>Tilbage</button>
+      </Link>
+      
+
+      
+      <Link to="/payment">
+         <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}> Continue</button>
        </Link>
-       
 
-
+<div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
+  
+</div>
        
 
 
