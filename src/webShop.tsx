@@ -370,7 +370,7 @@ export function App2() {
 
       <form onSubmit={handleSubmit}>
       
-        <label htmlFor="name">Navn</label>
+        <label htmlFor="name"></label>
   <input
     type="text"
     id="name"
