@@ -1,6 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import App2 from './App2';
+import { App2} from './src/webShop';
+import { describe, it, expect, } from 'vitest'; 
 
 describe('App2', () => {
   it('should render error message when error state is not null', () => {

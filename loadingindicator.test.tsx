@@ -1,6 +1,6 @@
-import React from 'react';
-import { render } from '@testing-library/react';
-import App2 from './App2';
+import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import {App2} from './src/webShop';
 
 describe('App2', () => {
   it('should render loading indicator when isLoading is true', () => {

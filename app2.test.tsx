@@ -1,29 +1,16 @@
-import { render, screen, fireEvent } from "@testing-library/react";
-import App2 from "./webShop";
-import { describe, test, expect } from 'vitest'
-
-
+import { describe, it, expect } from 'vitest';
+import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import {App2} from './src/webShop';
 
 describe('App2', () => {
-  test('submitting the form triggers handleSubmit', async () => {
-    global.fetch = jest.fn().mockImplementation(() =>
-      Promise.resolve({
-        ok: true,
-        json: () => Promise.resolve({ message: 'Order submitted successfully!' }),
-      })
-    );
-
+  it('submitting the form triggers handleSubmit', async () => {
     render(<App2 />);
+    await userEvent.type(screen.getByLabelText('Navn'), 'John Doe');
+    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
+    // continue for other fields
 
-  
-  });
-});
-fireEvent.change(screen.getByLabelText('Navn'), {
-  target: { value: 'John Doe' },
-});
-    fireEvent.change(screen.getByLabelText(/Email/), {
-      target: { value: "john@example.com" },
-    });
+    await userEvent.click(screen.getByText(/Submit Order/));
     fireEvent.change(screen.getByLabelText(/Telefon/), {
       target: { value: "12345678" },
     });
@@ -48,7 +35,6 @@ fireEvent.change(screen.getByLabelText('Navn'), {
     fireEvent.change(screen.getByLabelText(/Kommentar til ordre/), {
       target: { value: "Ingen særlige bemærkninger" },
     });
-
 
     fireEvent.click(
       screen.getByLabelText(/Jeg accepterer vilkår og betingelser/)
@@ -76,4 +62,5 @@ fireEvent.change(screen.getByLabelText('Navn'), {
         }),
       }
     );
-
+  }); 
+}); 

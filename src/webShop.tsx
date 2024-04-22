@@ -4,15 +4,14 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
   const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
   const marginRight = "20px";
-  const productHeight = "475px"; // Specifik højde til produktbjælkerne
-
+  const productHeight = "475px"; 
   return (
     <div
       style={{
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "space-between",
-        alignItems: "stretch", // Udvider bjælkerne til at fylde deres forældres højde
+        alignItems: "stretch", 
       }}
     >
       {products.map((product, index) => (
@@ -371,18 +370,18 @@ export function App2() {
       </div>
 
       <form onSubmit={handleSubmit}>
-        <div>
-          <input
-            type="text"
-            name="name"
-            placeholder="Navn"
-            required
-            value={deliveryAddress.name}
-            onChange={handleInputChange}
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-          />
-        </div>
-
+      
+        <label htmlFor="name">Navn</label>
+  <input
+    type="text"
+    id="name"
+    name="name"
+    placeholder="Navn"
+    required
+    value={deliveryAddress.name}
+    onChange={handleInputChange}
+    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+  />
         <div>
           <input
             type="email"
@@ -434,17 +433,6 @@ export function App2() {
           {error && <p>{error}</p>}
         </div>
 
-        <label htmlFor="name">Navn</label>
-  <input
-    type="text"
-    id="name"
-    name="name"
-    placeholder="Navn"
-    required
-    value={deliveryAddress.name}
-    onChange={handleInputChange}
-    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-  />
         <div>
           <select
             name="zipCode"
