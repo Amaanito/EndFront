@@ -318,15 +318,14 @@ export function App2() {
   };
 
   return (
-    <div style={{ margin: -40 }}>
-      <h1
-        style={{
-          maxWidth: "100%",
-          height: "70px",
-          backgroundColor: "White",
-          margin: 0,
-        }}
-      >
+<div style={{ margin: -40 }}>
+      {isLoading ? (
+        <div data-testid="loading-indicator">
+          Loading...
+        </div>
+      ) : null}
+      
+      <h1 style={{ maxWidth: "100%", height: "70px", backgroundColor: "White", margin: 0 }}>
         <img
           src="kurv.png"
           style={{
@@ -382,50 +381,58 @@ export function App2() {
     onChange={handleInputChange}
     style={{ width: "300px", height: "20px", marginBottom: "10px" }}
   />
-        <div>
-          <input
-            type="email"
-            name="email"
-            placeholder="Email"
-            required
-            value={deliveryAddress.email}
-            onChange={handleInputChange}
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-          />
-        </div>
+       <div>
+    <label htmlFor="email">Email</label>
+    <input
+      id="email"
+      name="email"
+      placeholder="Email"
+      required
+      type="email"
+      value={deliveryAddress.email}
+      onChange={handleInputChange}
+      style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+    />
+  </div>
 
-        <div>
-          <input
-            type="text"
-            name="phone"
-            placeholder="Telefon"
-            required
-            value={deliveryAddress.phone}
-            onChange={handleInputChange}
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-          />
-        </div>
+  <div>
+  <label htmlFor="phone">Telefon</label> {}
+  <input
+    id="phone" 
+    type="text"
+    name="phone"
+    placeholder="Telefon"
+    required
+    value={deliveryAddress.phone}
+    onChange={handleInputChange}
+    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+  />
+</div>
 
-        <div>
-          <input
-            type="text"
-            name="addressLine1"
-            placeholder="Adresse linje 1"
-            required
-            value={deliveryAddress.addressLine1}
-            onChange={handleInputChange}
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-          />
-        </div>
+<div>
+  <label htmlFor="addressLine1">Adresse linje 1</label>
+  <input
+    id="addressLine1"
+    name="addressLine1"
+    placeholder="Adresse linje 1"
+    required
+    value={deliveryAddress.addressLine1}
+    onChange={handleInputChange}
+    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+    type="text"
+  />
+</div>
 
-        <div>
-          <input
-            type="text"
-            name="addressLine2"
-            placeholder="Adresse linje 2"
-            value={deliveryAddress.addressLine2}
-            onChange={handleInputChange}
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+<div>
+  <label htmlFor="addressLine2">Adresse linje 2</label>
+  <input
+    id="addressLine2"
+    name="addressLine2"
+    placeholder="Adresse linje 2"
+    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+    type="text"
+    value={deliveryAddress.addressLine2}
+    onChange={handleInputChange}
           />
 
           {isLoading ? <p>Henter postnumre...</p> : <div></div>}
@@ -434,37 +441,35 @@ export function App2() {
         </div>
 
         <div>
-          <select
-            name="zipCode"
-            required
-            value={deliveryAddress.zipCode}
-            onChange={handleInputChange}
-            style={{
-              width: "300px",
-              height: "20px",
-              marginBottom: "10px",
-            }}
-          >
-            <option value="">Postnummer</option> {}
-            {postnumre.map((postnummer) => (
-              <option key={postnummer.nr} value={postnummer.nr}>
-                {postnummer.nr} {postnummer.navn}
-              </option>
-            ))}
-          </select>
-        </div>
+  <label htmlFor="zipCode">Postnummer</label>
+  <select
+    id="zipCode"  // Sørg for at id på select matcher htmlFor på label
+    name="zipCode"
+    required
+    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+  >
+    <option value="">Vælg postnummer</option>
+    {postnumre.map((postnummer) => (
+      <option key={postnummer.nr} value={postnummer.nr}>
+        {postnummer.nr} {postnummer.navn}
+      </option>
+    ))}
+  </select>
+</div>
 
-        <div>
-          <input
-            type="text"
-            name="city"
-            placeholder="By"
-            required
-            value={deliveryAddress.city}
-            readOnly // Dette felt er skrivebeskyttet, da det udfyldes automatisk
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-          />
-        </div>
+<div>
+  <label htmlFor="city">By</label> {}
+  <input
+    id="city"  
+    name="city"
+    placeholder="By"
+    readOnly
+    required
+    style={{ width: "300px", height: "20px", marginBottom: "10px" }}
+    type="text"
+    value={deliveryAddress.city}  
+  />
+</div>
 
         <div>
           <input
@@ -480,27 +485,27 @@ export function App2() {
         </div>
 
         <div>
-          <input
-            type="text"
-            name="companyName"
-            placeholder="Firmanavn"
-            value={deliveryAddress.companyName}
-            onChange={handleInputChange}
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-          />
-        </div>
-        
+  <label htmlFor="companyName">Firmanavn</label> {}
+  <input
+    id="companyName"  
+    name="companyName"
+    placeholder="Firmanavn"
+    onChange={handleInputChange}
+    type="text"
+    value={deliveryAddress.companyName} 
+  />
+</div>
 
-        <div>
-          <input
-            type="text"
-            name="vatNumber"
-            placeholder="CVR-nummer"
-            value={deliveryAddress.vatNumber}
-            onChange={handleInputChange}
-            style={{ width: "300px", height: "20px", marginBottom: "10px" }}
-          />
-        </div>
+<div>
+  <label htmlFor="vatNumber">CVR-nummer</label> {}
+  <input
+    id="vatNumber" 
+    name="vatNumber"
+    placeholder="CVR-nummer"
+    type="text"
+    value={deliveryAddress.vatNumber} 
+  />
+</div>
 
         <div
           style={{

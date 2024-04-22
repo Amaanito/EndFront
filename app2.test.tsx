@@ -2,18 +2,19 @@ import { describe, it, expect } from 'vitest';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import {App2} from './src/webShop';
+import React from 'react';
+
 
 describe('App2', () => {
   it('submitting the form triggers handleSubmit', async () => {
-    render(<App2 />);
+    render(<App2/>);
     await userEvent.type(screen.getByLabelText('Navn'), 'John Doe');
     await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-    // continue for other fields
-
-    await userEvent.click(screen.getByText(/Submit Order/));
-    fireEvent.change(screen.getByLabelText(/Telefon/), {
-      target: { value: "12345678" },
-    });
+   await userEvent.click(screen.getByText(/Submit Order/));
+  
+    fireEvent.change(screen.getByLabelText('Telefon'), {
+      target: { value: '12345678' },
+  });
     fireEvent.change(screen.getByLabelText(/Adresse linje 1/), {
       target: { value: "123 Main St" },
     });
