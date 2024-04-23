@@ -263,46 +263,7 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
           e.preventDefault();
       
           
-          /** 
-          const formData = {
-            name: deliveryAddress.name,
-            email: deliveryAddress.email,
-            phone: deliveryAddress.phone,
-            addressLine1: deliveryAddress.addressLine1,
-            addressLine2: deliveryAddress.addressLine2,
-            zipCode: deliveryAddress.zipCode,
-            city: deliveryAddress.city,
-            country: deliveryAddress.country,
-            companyName: deliveryAddress.companyName,
-            vatNumber: deliveryAddress.vatNumber,
-            orderComment: e.target.orderComment.value,
-            cart,
-            totalPrice,
-            termsAccepted,
-            receiveMarketing
-
-        
-
-          };
-            try {
-              
-              //const response = await fetch("https://eonz7flpdjy1og5.m.pipedream.net", {
-              const response = await fetch("http://127.0.0.1:8000/gem-bruger/", {
-                method: "POST",
-                headers: {
-                  "Content-Type": "application/json",
-                  //"X-CSRFToken": csrfToken,
-                },
-                body: JSON.stringify(formData)
-              });
-              if (response.ok) {
-                window.alert('Order submitted successfully!'); // Ændring: Brug af window.alert for en pop op besked
-              } else {
-                window.alert('Order submission failed!'); // Ændring: Brug af window.alert for en pop op besked
-              }
-            } catch (error) {
-              console.error('There was a problem with sending data:', error);
-            }*/
+       
             const csrfToken = getCsrfToken(); // Hent CSRF-token fra cookies
   const formData = {
     name: deliveryAddress.name,
