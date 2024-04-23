@@ -364,136 +364,10 @@ export function App2() {
             <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
             <h3>Total Price: <span>{totalPrice.toFixed(2)} DKK</span></h3>
          
-            <div>
-           
-              <h1>Leverings- og faktureringsadresse</h1>
-            </div>
+          
 
 
 
-            
-      
-            
-        
-            <form onSubmit={handleSubmit}>
-              
-              <div>
-                <input type="text" name="name" placeholder="Navn" required value={deliveryAddress.name} onChange={handleInputChange} 
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-                 
-              </div>
-            
-            
-
-              <div>
-                <input type="email" name="email" placeholder="Email" required value={deliveryAddress.email} onChange={handleInputChange}  
-                style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-        
-              </div>
-
-              <div>
-                <input type="text" name="phone" placeholder="Telefon" required value={deliveryAddress.phone} onChange={handleInputChange} 
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-                
-              </div>
-
-              <div>
-                <input type="text" name="addressLine1" placeholder="Adresse linje 1" required value={deliveryAddress.addressLine1} onChange={handleInputChange} 
-                
-                style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-                
-              
-              </div>
-
-              <div>
-                <input type="text" name="addressLine2" placeholder="Adresse linje 2" value={deliveryAddress.addressLine2} onChange={handleInputChange} 
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-                
-                {isLoading ? <p>Henter postnumre...</p> : <div></div>}
-
-{error && <p>{error}</p>}
-              
-              </div>
-
-              
-             
-              <div>
-  <select
-    name="zipCode"
-    required
-    value={deliveryAddress.zipCode}
-    onChange={handleInputChange}
-    style={{
-      width: '300px',
-      height: '20px',
-      marginBottom: '10px',
-     
-    }}
-  >
-    <option value="">Postnummer</option> {}
-    {postnumre.map((postnummer) => (
-      <option key={postnummer.nr} value={postnummer.nr}>
-        {postnummer.nr} {postnummer.navn}
-      </option>
-    ))}
-  </select>
-</div>
-
-
-
-<div>
-  <input
-    type="text"
-    name="city"
-    placeholder="By"
-    required
-    value={deliveryAddress.city}
-    readOnly // Dette felt er skrivebeskyttet, da det udfyldes automatisk
-    style={{ width: '300px', height: '20px', marginBottom: '10px' }}
-  />
-</div>
-
-
-              <div>
-                <input type="text" name="country" placeholder="Land" required value={deliveryAddress.country} onChange={handleInputChange} disabled
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-
-              </div>
-
-              <div>
-                <input type="text" name="companyName" placeholder="Firmanavn" value={deliveryAddress.companyName} onChange={handleInputChange}
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-
-              </div>
-
-              <div>
-                <input type="text" name="vatNumber" placeholder="CVR-nummer" value={deliveryAddress.vatNumber} onChange={handleInputChange}
-                 style={{ width: '300px', height: '20px', marginBottom: '10px' }} />
-
-               
-                </div>
-              
-
-              
-
-
-                
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginBottom: '10px' }}>
-
-  <label htmlFor="orderComment" style={{ alignSelf: 'center', marginBottom: '5px' }}>Kommentar til ordre:
-  </label>
-  <textarea
-    id="orderComment"
-    name="orderComment"
-    placeholder="Tilføj en kommentar til din ordre her..."
-    style={{ width: '50%', height: '100px' }} 
-  >
-
-  </textarea>
-
-
-
-</div>
 
 
                 <div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
@@ -504,32 +378,8 @@ export function App2() {
           
 
 
-          {/* Accept terms */}
-        <div>
-          <input
-            type="checkbox"
-            id="terms"
-            checked={termsAccepted}
-            onChange={(e) => setTermsAccepted(e.target.checked)}
-          />
-          <label htmlFor="terms">Jeg accepterer vilkår og betingelser</label>
         </div>
-        
-        {/* Marketing */}
-        <div>
-          <input
-            type="checkbox"
-            id="marketing"
-            checked={receiveMarketing}
-            onChange={(e) => setReceiveMarketing(e.target.checked)}
-          />
-          <label htmlFor="marketing">Jeg ønsker at modtage marketingemails</label>
-        </div>
-
-          
-
-        </div>
-      </form>
+      
       
     </div>
     
