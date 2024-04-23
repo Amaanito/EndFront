@@ -31,6 +31,7 @@ const Checkout = () => {
   return (
     <div>
       
+      
       <div 
       style={{ margin: -50 }}>
             

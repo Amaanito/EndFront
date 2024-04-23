@@ -1,5 +1,5 @@
 import React from 'react';
-
+import { Link } from 'react-router-dom';
 
 
 export function ProductList({ products, addToCart, upsellNotification }) {
@@ -498,9 +498,9 @@ export function App2() {
 
                 <div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
 
-          <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}
-          >Submit Order </button>
-
+                <Link to="/Checkout">
+         <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}> Submit Order </button>
+       </Link>
           
 
 
