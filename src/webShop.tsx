@@ -448,7 +448,7 @@ export function App2() {
     required
     style={{ width: "300px", height: "20px", marginBottom: "10px" }}
   >
-    <option value=""></option>
+    <option value="">Vælg postnummer</option>
     {postnumre.map((postnummer) => (
       <option key={postnummer.nr} value={postnummer.nr}>
         {postnummer.nr} {postnummer.navn}
