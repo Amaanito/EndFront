@@ -100,7 +100,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       }
 
       
-      export function App() {
+      export function App2() {
       
     
         const [termsAccepted, setTermsAccepted] = React.useState(false);
@@ -108,6 +108,9 @@ export function ProductList({ products, addToCart, upsellNotification }) {
         const [products, setProducts] = React.useState([]);
         const [cart, setCart] = React.useState([]);
         const [totalPrice, setTotalPrice] = React.useState(0);
+        const [postnumre, setPostnumre] = React.useState([]);
+        const [isLoading, setIsLoading] = React.useState(false);
+        const [error, setError] = React.useState(null);
         const [deliveryAddress, setDeliveryAddress] = React.useState({
 
           
@@ -129,6 +132,36 @@ export function ProductList({ products, addToCart, upsellNotification }) {
             .then(data => setProducts(data))
             .catch(error => console.error('Error fetching data:', error));
         }, []);
+
+        React.useEffect(() => {
+          fetch('https://api.dataforsyningen.dk/postnumre')
+            .then(response => response.json())
+            .then(data => {
+              setPostnumre(data);
+              setIsLoading(false);
+            })
+            .catch(error => {
+              console.error('Error fetching post codes:', error);
+              setError('Kunne ikke hente postnumre.');
+              setIsLoading(false);
+            });
+        }, []);
+          
+        
+        React.useEffect(() => {
+          setIsLoading(true); // Starter indlæsningen
+          fetch('https://api.dataforsyningen.dk/postnumre')
+            .then(response => response.json())
+            .then(data => {
+              setPostnumre(data);
+              setIsLoading(false); // Stopper indlæsningen
+            })
+            .catch(error => {
+              console.error('Error fetching post codes:', error);
+              setIsLoading(false); // Stopper indlæsningen ved fejl
+            });
+        }, []);
+        
       
         const addToCart = (productId) => {
           const productToAdd = products.find(product => product.id === productId);
@@ -187,8 +220,23 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       
         const handleInputChange = (e) => {
           const { name, value } = e.target;
-          setDeliveryAddress({ ...deliveryAddress, [name]: value });
+          
+          if (name === 'zipCode') {
+            const postNummerObj = postnumre.find(postnummer => postnummer.nr === value.split(" ")[0]);
+            setDeliveryAddress(prevState => ({
+              ...prevState,
+              zipCode: value.split(" ")[0],
+              city: postNummerObj ? postNummerObj.navn : '',
+            }));
+          } else {
+            setDeliveryAddress(prevState => ({
+              ...prevState,
+              [name]: value,
+            }));
+          }
         };
+        
+        
       
         const handleSubmit = async (e) => {
           e.preventDefault();
@@ -272,4 +320,4 @@ export function ProductList({ products, addToCart, upsellNotification }) {
   );
 }
 
-export default App;
+export default App2;

@@ -1,6 +1,6 @@
 import './App.css';
 import{BrowserRouter as Router,Route,Switch} from 'react-router-dom';
-import { App} from './webShop';
+import { App2} from './webShop';
 import Payment from './Payment';
 import Confirm from './Confirm';
 import Checkout from './Checkout';
@@ -12,7 +12,7 @@ function RunApp() {
         <Switch>
 
           <Route exact path="/">
-            <App />
+            <App2 />
           </Route>
 
 
