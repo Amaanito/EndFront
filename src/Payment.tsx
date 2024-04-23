@@ -5,7 +5,7 @@ const Payment = () => {
 return(
   <div>
     <h1>Bank oplysninger!</h1>
-    <p> Indtast dine kortoplysninger så jeg kan stjælre.</p>
+    <p> Indtast dine kortoplysninger.</p>
 
 
     <Link to= "/Checkout" >
