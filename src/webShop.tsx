@@ -382,7 +382,7 @@ export function App2() {
     style={{ width: "300px", height: "20px", marginBottom: "10px" }}
   />
        <div>
-    <label htmlFor="email">Email</label>
+    <label htmlFor="email"></label>
     <input
       id="email"
       name="email"
@@ -396,7 +396,7 @@ export function App2() {
   </div>
 
   <div>
-  <label htmlFor="phone">Telefon</label> {}
+  <label htmlFor="phone"></label> {}
   <input
     id="phone" 
     type="text"
@@ -410,7 +410,7 @@ export function App2() {
 </div>
 
 <div>
-  <label htmlFor="addressLine1">Adresse linje 1</label>
+  <label htmlFor="addressLine1"></label>
   <input
     id="addressLine1"
     name="addressLine1"
@@ -424,7 +424,7 @@ export function App2() {
 </div>
 
 <div>
-  <label htmlFor="addressLine2">Adresse linje 2</label>
+  <label htmlFor="addressLine2"></label>
   <input
     id="addressLine2"
     name="addressLine2"
@@ -441,14 +441,14 @@ export function App2() {
         </div>
 
         <div>
-  <label htmlFor="zipCode">Postnummer</label>
+  <label htmlFor="zipCode"></label>
   <select
     id="zipCode"  // Sørg for at id på select matcher htmlFor på label
     name="zipCode"
     required
     style={{ width: "300px", height: "20px", marginBottom: "10px" }}
   >
-    <option value="">Vælg postnummer</option>
+    <option value=""></option>
     {postnumre.map((postnummer) => (
       <option key={postnummer.nr} value={postnummer.nr}>
         {postnummer.nr} {postnummer.navn}
@@ -458,7 +458,7 @@ export function App2() {
 </div>
 
 <div>
-  <label htmlFor="city">By</label> {}
+  <label htmlFor="city"></label> {}
   <input
     id="city"  
     name="city"
@@ -485,7 +485,7 @@ export function App2() {
         </div>
 
         <div>
-  <label htmlFor="companyName">Firmanavn</label> {}
+  <label htmlFor="companyName"></label> {}
   <input
     id="companyName"  
     name="companyName"
@@ -497,7 +497,7 @@ export function App2() {
 </div>
 
 <div>
-  <label htmlFor="vatNumber">CVR-nummer</label> {}
+  <label htmlFor="vatNumber"></label> {}
   <input
     id="vatNumber" 
     name="vatNumber"
