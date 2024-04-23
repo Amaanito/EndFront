@@ -261,12 +261,12 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
         };
         const handleSubmit = async (e) => {
           e.preventDefault();
-      
-          
-       
-            const csrfToken = getCsrfToken(); // Hent CSRF-token fra cookies
-  const formData = {
-    name: deliveryAddress.name,
+  if (!termsAccepted) {
+    alert("Du skal acceptere vilkår og betingelser for at fortsætte.");
+    return;
+  }
+          const formData = {
+            name: deliveryAddress.name,
             email: deliveryAddress.email,
             phone: deliveryAddress.phone,
             addressLine1: deliveryAddress.addressLine1,

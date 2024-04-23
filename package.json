@@ -43,10 +43,14 @@
     "react-router-dom": "^5.3.4"
   },
   "devDependencies": {
+<<<<<<< HEAD
     "@testing-library/jest-dom": "^6.4.2",
     "@testing-library/react": "^15.0.2",
     "@types/jest": "^29.5.12",
     "@types/react": "^18.2.78",
+=======
+    "@types/react": "^18.2.79",
+>>>>>>> terms
     "@types/react-dom": "^18.2.25",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
