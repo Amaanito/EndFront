@@ -163,201 +163,212 @@ export function App2() {
       .catch((error) => console.error("Error fetching data:", error));
   }, []);
 
-  React.useEffect(() => {
-    fetch("https://api.dataforsyningen.dk/postnumre")
-      .then((response) => response.json())
-      .then((data) => {
-        setPostnumre(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching post codes:", error);
-        setError("Kunne ikke hente postnumre.");
-        setIsLoading(false);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    setIsLoading(true); // Starter indlæsningen
-    fetch("https://api.dataforsyningen.dk/postnumre")
-      .then((response) => response.json())
-      .then((data) => {
-        setPostnumre(data);
-        setIsLoading(false); // Stopper indlæsningen
-      })
-      .catch((error) => {
-        console.error("Error fetching post codes:", error);
-        setIsLoading(false); // Stopper indlæsningen ved fejl
-      });
-  }, []);
-
-  const addToCart = (productId) => {
-    const productToAdd = products.find((product) => product.id === productId);
-    const existingCartItem = cart.find((item) => item.id === productId);
-    let newCart;
-
-    if (existingCartItem) {
-      newCart = cart.map((item) =>
-        item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
-      );
-    } else {
-      newCart = [...cart, { ...productToAdd, quantity: 1 }];
-    }
-
-    setCart(newCart);
-    setTotalPrice(calculateTotalPrice(newCart));
-  };
-
-  const removeFromCart = (productId) => {
-    const newCart = cart.reduce((acc, item) => {
-      if (item.id === productId) {
-        if (item.quantity > 1) {
-          acc.push({ ...item, quantity: item.quantity - 1 });
-        }
-      } else {
-        acc.push(item);
-      }
-      return acc;
-    }, []);
-
-    setCart(newCart);
-    setTotalPrice(calculateTotalPrice(newCart));
-  };
-
-  const calculateTotalPrice = (cart) => {
-    let totalPrice = 0;
-    cart.forEach((item) => {
-      let itemTotal = item.price * item.quantity;
-      if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
-        itemTotal *= 1 - item.rebatePercent / 100;
-      }
-      totalPrice += itemTotal;
-    });
-
-    if (totalPrice > 300) {
-      totalPrice *= 0.9; // Apply 10% discount for orders over 300 DKK
-    }
-
-    return totalPrice;
-  };
-
-  const upsellNotification = (upsellProductId) => {
-    const upsellProduct = products.find(
-      (product) => product.id === upsellProductId
-    );
-    alert(
-      `Overvej også ${upsellProduct.name} til ${upsellProduct.price} DKK for en bedre værdi!`
-    );
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "zipCode") {
-      const postNummerObj = postnumre.find(
-        (postnummer) => postnummer.nr === value.split(" ")[0]
-      );
-      setDeliveryAddress((prevState) => ({
-        ...prevState,
-        zipCode: value.split(" ")[0],
-        city: postNummerObj ? postNummerObj.navn : "",
-      }));
-    } else {
-      setDeliveryAddress((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    // Get CSRF token
-    const csrfToken = getCsrfToken();
-
-    const billingInfo = {
-      name: deliveryAddress.name,
-      email: deliveryAddress.email,
-      phone: deliveryAddress.phone,
-      addressLine1: deliveryAddress.addressLine1,
-      addressLine2: deliveryAddress.addressLine2,
-      zipCode: deliveryAddress.zipCode,
-      city: deliveryAddress.city,
-      country: deliveryAddress.country,
-      companyName: deliveryAddress.companyName,
-      vatNumber: deliveryAddress.vatNumber,
-      orderComment: e.target.orderComment.value,
-      cart,
-      totalPrice,
-      termsAccepted,
-      receiveMarketing,
-    };
-
-    try {
-      const response = await fetch("http://localhost:8000/billing", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
-        },
-        body: JSON.stringify(billingInfo),
-      });
-
-      if (response.ok) {
-        window.alert("Order submitted successfully!");
-      } else {
-        window.alert("Order submission failed!");
-      }
-    } catch (error) {
-      console.error("There was a problem with sending data:", error);
-    }
-  };
-
-  const scrollToShoppingCart = () => {
-    document
-      .getElementById("shopping-cart")
-      .scrollIntoView({ behavior: "smooth", block: "start" });
-  };
-
-  return (
-<div style={{ margin: -40 }}>
-      {isLoading ? (
-        <div data-testid="loading-indicator">
-          Loading...
-        </div>
-      ) : null}
+        React.useEffect(() => {
+          fetch('https://api.dataforsyningen.dk/postnumre')
+            .then(response => response.json())
+            .then(data => {
+              setPostnumre(data);
+              setIsLoading(false);
+            })
+            .catch(error => {
+              console.error('Error fetching post codes:', error);
+              setError('Kunne ikke hente postnumre.');
+              setIsLoading(false);
+            });
+        }, []);
+          
+        
+        React.useEffect(() => {
+          setIsLoading(true); // Starter indlæsningen
+          fetch('https://api.dataforsyningen.dk/postnumre')
+            .then(response => response.json())
+            .then(data => {
+              setPostnumre(data);
+              setIsLoading(false); // Stopper indlæsningen
+            })
+            .catch(error => {
+              console.error('Error fetching post codes:', error);
+              setIsLoading(false); // Stopper indlæsningen ved fejl
+            });
+        }, []);
+        
       
-      <h1 style={{ maxWidth: "100%", height: "70px", backgroundColor: "White", margin: 0 }}>
-        <img
-          src="kurv.png"
-          style={{
-            width: "50px",
-            height: "auto",
-            marginLeft: "1150px",
-            marginTop: "15px",
-            background: "none",
-            cursor: "pointer",
-          }}
-          onClick={scrollToShoppingCart}
-        />
-      </h1>
+        const addToCart = (productId) => {
+          const productToAdd = products.find(product => product.id === productId);
+          const existingCartItem = cart.find(item => item.id === productId);
+          let newCart;
+      
+          if (existingCartItem) {
+            newCart = cart.map(item => item.id === productId ? { ...item, quantity: item.quantity + 1 } : item);
+          } else {
+            newCart = [...cart, { ...productToAdd, quantity: 1 }];
+          }
 
-      <h1>Products</h1>
-      <ProductList
-        products={products}
-        addToCart={addToCart}
-        upsellNotification={upsellNotification}
-      />
+        
+      
+          setCart(newCart);
+          setTotalPrice(calculateTotalPrice(newCart));
+        };
+      
+        const removeFromCart = (productId) => {
+          const newCart = cart.reduce((acc, item) => {
+            if (item.id === productId) {
+              if (item.quantity > 1) {
+                acc.push({ ...item, quantity: item.quantity - 1 });
+              }
+            } else {
+              acc.push(item);
+            }
+            return acc;
+          }, []);
+      
+          setCart(newCart);
+          setTotalPrice(calculateTotalPrice(newCart));
+        };
+      
+        const calculateTotalPrice = (cart) => {
+          let totalPrice = 0;
+          cart.forEach(item => {
+            let itemTotal = item.price * item.quantity;
+            if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
+              itemTotal *= (1 - item.rebatePercent / 100);
+            }
+            totalPrice += itemTotal;
+          });
+      
+          if (totalPrice > 300) {
+            totalPrice *= 0.9; // Apply 10% discount for orders over 300 DKK
+          }
+      
+          return totalPrice;
+        };
 
-      <img
-        src="kurv.png"
-        style={{
-          width: "75px",
-          height: "auto",
-          marginTop: "30px",
-          background: "none",
-        }}
-      />
+        
+      
+        const upsellNotification = (upsellProductId) => {
+          const upsellProduct = products.find(product => product.id === upsellProductId);
+          alert(`Overvej også ${upsellProduct.name} til ${upsellProduct.price} DKK for en bedre værdi!`);
+        };
+      
+        const handleInputChange = (e) => {
+          const { name, value } = e.target;
+          
+          if (name === 'zipCode') {
+            const postNummerObj = postnumre.find(postnummer => postnummer.nr === value.split(" ")[0]);
+            setDeliveryAddress(prevState => ({
+              ...prevState,
+              zipCode: value.split(" ")[0],
+              city: postNummerObj ? postNummerObj.navn : '',
+            }));
+          } else {
+            setDeliveryAddress(prevState => ({
+              ...prevState,
+              [name]: value,
+            }));
+          }
+        };
+        const handleSubmit = async (e) => {
+          e.preventDefault();
+      
+          
+          /** 
+          const formData = {
+            name: deliveryAddress.name,
+            email: deliveryAddress.email,
+            phone: deliveryAddress.phone,
+            addressLine1: deliveryAddress.addressLine1,
+            addressLine2: deliveryAddress.addressLine2,
+            zipCode: deliveryAddress.zipCode,
+            city: deliveryAddress.city,
+            country: deliveryAddress.country,
+            companyName: deliveryAddress.companyName,
+            vatNumber: deliveryAddress.vatNumber,
+            orderComment: e.target.orderComment.value,
+            cart,
+            totalPrice,
+            termsAccepted,
+            receiveMarketing
+
+        
+
+          };
+            try {
+              
+              //const response = await fetch("https://eonz7flpdjy1og5.m.pipedream.net", {
+              const response = await fetch("http://127.0.0.1:8000/gem-bruger/", {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json",
+                  //"X-CSRFToken": csrfToken,
+                },
+                body: JSON.stringify(formData)
+              });
+              if (response.ok) {
+                window.alert('Order submitted successfully!'); // Ændring: Brug af window.alert for en pop op besked
+              } else {
+                window.alert('Order submission failed!'); // Ændring: Brug af window.alert for en pop op besked
+              }
+            } catch (error) {
+              console.error('There was a problem with sending data:', error);
+            }*/
+            const csrfToken = getCsrfToken(); // Hent CSRF-token fra cookies
+  const formData = {
+    name: deliveryAddress.name,
+            email: deliveryAddress.email,
+            phone: deliveryAddress.phone,
+            addressLine1: deliveryAddress.addressLine1,
+            addressLine2: deliveryAddress.addressLine2,
+            zipCode: deliveryAddress.zipCode,
+            city: deliveryAddress.city,
+            country: deliveryAddress.country,
+            companyName: deliveryAddress.companyName,
+            vatNumber: deliveryAddress.vatNumber,
+            orderComment: e.target.orderComment.value,
+            cart,
+            totalPrice,
+            termsAccepted,
+            receiveMarketing
+  }; try {
+    const response = await fetch("http://127.0.0.1:8000/gem-bruger/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": csrfToken, // Inkluder CSRF-token her
+      },
+      body: JSON.stringify(formData)
+    });
+    if (response.ok) {
+      window.alert('Order submitted successfully!');
+    } else {
+      window.alert('Order submission failed!');
+    }
+  } catch (error) {
+    console.error('There was a problem with sending data:', error);
+  }
+        };
+      
+        const scrollToShoppingCart = () => {
+          document.getElementById('shopping-cart').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+      
+        return (
+          
+      
+           <div style={{ margin: -40 }}>
+            <h1 style={{ maxWidth: '100%', height: '70px', backgroundColor: 'White', margin: 0 }}>
+           
+              <img src="kurv.png"
+               style={{ width: '50px', height: 'auto', marginLeft: '1150px', marginTop: '15px', background: 'none', cursor: 'pointer' }} 
+                onClick={scrollToShoppingCart} />
+            </h1>
+
+            
+            
+            <h1>Products</h1>
+            <ProductList products={products} addToCart={addToCart} upsellNotification={upsellNotification} />
+      
+            <img src="kurv.png"
+               style={{ width: '75px', height: 'auto',  marginTop: '30px', background: 'none' }}  />
 
             <h1 id="shopping-cart">Shopping Cart</h1>
         
