@@ -1,19 +1,19 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-
+import React from "react";
+import { Link } from "react-router-dom";
 
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
   const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
   const marginRight = "20px";
-  const productHeight = "475px"; 
+  const productHeight = "475px";
+
   return (
     <div
       style={{
         display: "flex",
         flexWrap: "wrap",
         justifyContent: "space-between",
-        alignItems: "stretch", 
+        alignItems: "stretch",
       }}
     >
       {products.map((product, index) => (
@@ -88,26 +88,53 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 }
 
 export function CartItem({ item, removeFromCart, updateQuantity }) {
+  const itemTotal = item.price * item.quantity;
+  let itemDiscount = 0;
+
+  if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
+    itemDiscount = itemTotal * (item.rebatePercent / 100);
+  }
+
+  const itemFinalTotal = itemTotal - itemDiscount;
+
   return (
-    <li>
-      {item.name} - {item.price} DKK - Quantity:
-      <select
-        value={item.quantity}
-        onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}
-      >
-        {/* Dropdown med antal tilføjelser */}
-        {[...Array(10).keys()].map((i) => (
-          <option key={i + 1} value={i + 1}>
-            {i + 1}
-          </option>
-        ))}
-      </select>
-      <button onClick={() => removeFromCart(item.id)}>Remove</button>
-      {/* Tilføjelse af prisoplysning pr. enhed */}
-      <p>Price per item: {item.price} DKK</p>
-      {/* Viser totalprisen for alle enheder af denne vare */}
-      <p>Total price of this product: {item.price * item.quantity} DKK</p>
-    </li>
+    <div className="cart-item">
+      <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
+      <div className="cart-item-info">
+        <h3 className="cart-item-title">{item.name}</h3>
+        <p className="cart-item-price">Pris: {item.price.toFixed(2)} kr.</p>
+        <div className="cart-item-quantity">
+          Antal:
+          <select
+            className="quantity-select"
+            value={item.quantity}
+            onChange={(e) =>
+              updateQuantity(item.id, parseInt(e.target.value, 10))
+            }
+          >
+            {[...Array(10).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
+            ))}
+          </select>
+        </div>
+        {itemDiscount > 0 && (
+          <p className="cart-item-discount">
+            Rabat: -{itemDiscount.toFixed(2)} kr.
+          </p>
+        )}
+        <p className="cart-item-total-price">
+          Total: {itemFinalTotal.toFixed(2)} kr.
+        </p>
+        <button
+          className="remove-button"
+          onClick={() => removeFromCart(item.id)}
+        >
+          Fjern
+        </button>
+      </div>
+    </div>
   );
 }
 
@@ -271,11 +298,11 @@ export function App2() {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Get CSRF token
-    const csrfToken = getCsrfToken();
-
-    const billingInfo = {
+    if (!termsAccepted) {
+      alert("Du skal acceptere vilkår og betingelser for at fortsætte.");
+      return;
+    }
+    const formData = {
       name: deliveryAddress.name,
       email: deliveryAddress.email,
       phone: deliveryAddress.phone,
@@ -292,17 +319,15 @@ export function App2() {
       termsAccepted,
       receiveMarketing,
     };
-
     try {
-      const response = await fetch("http://localhost:8000/billing", {
+      const response = await fetch(/*"http://127.0.0.1:8000/gem-bruger/"*/"https://eonz7flpdjy1og5.m.pipedream.net", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-CSRFToken": csrfToken,
+          "X-CSRFToken": CsrfToken, // Inkluder CSRF-token her
         },
-        body: JSON.stringify(billingInfo),
+        body: JSON.stringify(formData),
       });
-
       if (response.ok) {
         window.alert("Order submitted successfully!");
       } else {
@@ -320,14 +345,15 @@ export function App2() {
   };
 
   return (
-<div style={{ margin: -40 }}>
-      {isLoading ? (
-        <div data-testid="loading-indicator">
-          Loading...
-        </div>
-      ) : null}
-      
-      <h1 style={{ maxWidth: "100%", height: "70px", backgroundColor: "White", margin: 0 }}>
+    <div style={{ margin: -40 }}>
+      <h1
+        style={{
+          maxWidth: "100%",
+          height: "70px",
+          backgroundColor: "White",
+          margin: 0,
+        }}
+      >
         <img
           src="kurv.png"
           style={{
@@ -359,34 +385,31 @@ export function App2() {
         }}
       />
 
-            <h1 id="shopping-cart">Shopping Cart</h1>
-        
-            <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
-            <h3>Total Price: <span>{totalPrice.toFixed(2)} DKK</span></h3>
-         
-          
+      <h1 id="shopping-cart">Shopping Cart</h1>
 
+      <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
+      <h3>
+        Total Price: <span>{totalPrice.toFixed(2)} DKK</span>
+      </h3>
 
-
-
-
-                <div style={{ textAlign: 'right', marginRight: '250px', marginTop: '20px' }}>
-
-                <Link to="/Checkout">
-         <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}> Submit Order </button>
-       </Link>
-          
-
-
-        </div>
-      
-      
+      <div
+        style={{
+          textAlign: "right",
+          marginRight: "150px",
+          marginTop: "80px",
+          marginBottom: "80px",
+        }}
+      >
+        <Link to="/checkout">
+          <button
+            type="submit"
+            style={{ backgroundColor: "green", color: "white", width: "125px" }}
+          >
+            Submit Order{" "}
+          </button>
+        </Link>
+      </div>
     </div>
-    
-
-   
-
-    
   );
 }
 
