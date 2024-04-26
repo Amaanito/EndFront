@@ -196,7 +196,7 @@ const Checkout = () => {
           <label htmlFor="marketing">Jeg accepterer at modtage marketingsmails</label>
         </div>
         
-        {formSubmitted && <Link to="/payment">Fortsæt til betaling →</Link>}
+        {formSubmitted && <Link to="/confirm">Fortsæt til betaling →</Link>}
       </form>
     </div>
   );
