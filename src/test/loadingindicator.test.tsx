@@ -1,8 +1,7 @@
 import { describe, it, expect, } from 'vitest';
 import { render } from '@testing-library/react';
-import {App2} from './src/webShop';
-import React from 'react';
-
+import {App2} from '../webApp';
+import '@testing-library/jest-dom'
 
 describe('App2', () => {
   it('should render loading indicator when isLoading is true', () => {

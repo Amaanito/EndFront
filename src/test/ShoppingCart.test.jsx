@@ -1,6 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 import { render, screen } from '@testing-library/react';
-import ShoppingCart from './ShoppingCart';
+import ShoppingCart from '../ShoppingCart';
 
 describe('renders shopping cart and displays cart items', () => {
   it("should work", () => { 

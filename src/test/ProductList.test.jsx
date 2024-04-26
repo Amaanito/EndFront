@@ -1,5 +1,5 @@
 import { render, fireEvent, screen } from '@testing-library/react';
-import ProductList from './ProductList';
+import ProductList from '../ProductList';
 import { test, expect, vi } from 'vitest'
 
 test('renders product list and handles add to cart', () => {

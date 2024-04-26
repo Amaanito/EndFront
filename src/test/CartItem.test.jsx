@@ -1,5 +1,5 @@
 import { render, fireEvent } from '@testing-library/react';
-import CartItem from './CartItem';
+import CartItem from '../CartItem';
 import { test, expect, vi } from 'vitest'
 
 test('renders cart item and handles remove from cart', () => {

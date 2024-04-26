@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "CartItem.jsx"],
+  "include": ["src", "src/CartItem.jsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,6 +1,5 @@
-import React from 'react';
 import { render } from '@testing-library/react';
-import { App2} from './src/webShop';
+import { App2} from '../webApp';
 import { describe, it, expect, } from 'vitest'; 
 
 describe('App2', () => {
