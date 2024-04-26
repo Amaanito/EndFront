@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const Checkout = () => {
@@ -20,6 +20,7 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [formSubmitted, setFormSubmitted] = useState(false);
+  
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,11 +55,9 @@ const Checkout = () => {
       }));
     }
 
-
-
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     // Validering af indtastede oplysninger
     if (deliveryAddress.name.trim() === '' ||
@@ -73,6 +72,38 @@ const Checkout = () => {
     }
     // Håndtering af formularsubmit
     setFormSubmitted(true);
+    const formData = {
+      name: deliveryAddress.name,
+      email: deliveryAddress.email,
+      phone: deliveryAddress.phone,
+      addressLine1: deliveryAddress.addressLine1,
+      addressLine2: deliveryAddress.addressLine2,
+      zipCode: deliveryAddress.zipCode,
+      city: deliveryAddress.city,
+      country: deliveryAddress.country,
+      companyName: deliveryAddress.companyName,
+      vatNumber: deliveryAddress.vatNumber,
+      orderComment: e.target.orderComment.value,
+      termsAccepted,
+      marketingAccepted,
+    };
+    try {
+      const response = await fetch(/*"http://127.0.0.1:8000/gem-bruger/"*/"https://eonz7flpdjy1og5.m.pipedream.net", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+      if (response.ok) {
+        window.alert("Order submitted successfully!");
+      } else {
+        window.alert("Order submission failed!");
+      }
+    } catch (error) {
+      console.error("There was a problem with sending data:", error);
+    }
+
   };
 
   return (
