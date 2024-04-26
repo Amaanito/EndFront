@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Checkout = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
-  const [marketingAccepted, setMarketingAccepted] = useState(false); // New state for marketing acceptance
+  const [marketingAccepted, setMarketingAccepted] = useState(false); 
   const [deliveryAddress, setDeliveryAddress] = useState({
     name: '',
     email: '',

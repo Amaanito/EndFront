@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 export function ProductList({ products, addToCart, upsellNotification }) {
@@ -160,15 +160,21 @@ export function App2() {
   const [products, setProducts] = React.useState([]);
   const [cart, setCart] = React.useState([]);
   const [totalPrice, setTotalPrice] = React.useState(0);
-  const [isLoading, setIsLoading] = React.useState(false);
-
-  React.useEffect(() => {
+  const [isLoading, setIsLoading] = useState(false);
+  
+  useEffect(() => {
+    setIsLoading(true); // Start indlæsning
     fetch("/items.json")
       .then((response) => response.json())
-      .then((data) => setProducts(data))
-      .catch((error) => console.error("Error fetching data:", error));
+      .then((data) => {
+        setProducts(data);
+        setIsLoading(false); // Stop indlæsning når data er indlæst
+      })
+      .catch((error) => {
+        console.error("Error fetching data:", error);
+        setIsLoading(false); // Stop indlæsning hvis der er en fejl
+      });
   }, []);
-
   const addToCart = (productId) => {
     const productToAdd = products.find((product) => product.id === productId);
     const existingCartItem = cart.find((item) => item.id === productId);
@@ -218,6 +224,10 @@ export function App2() {
 
     return totalPrice;
   };
+ 
+  if (isLoading) {
+    return <div>Indlæser...</div>;
+  }
 
   const upsellNotification = (upsellProductId) => {
     const upsellProduct = products.find(
