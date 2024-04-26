@@ -43,6 +43,17 @@ const Checkout = () => {
       ...prevState,
       [name]: value,
     }));
+    if (name === "name") {
+      // Tillader kun bogstaver og nogle almindelige navneseparatorer som mellemrum, bindestreger og apostroffer
+      const isValidName = /^[A-Za-z\s'-]+$/.test(value);
+      e.target.setCustomValidity(isValidName ? "" : "Navnet må kun indeholde bogstaver.");
+      if (!isValidName) {
+        e.target.reportValidity();
+      }
+    } else if (name === "phone") {
+      e.target.setCustomValidity("");
+    }
+  
   
     // Ingen opdatering af phoneError her
     if (name === "phone") {
@@ -57,14 +68,19 @@ const Checkout = () => {
       
       }
     } else if (name === "zipCode") {
-      const postNummerObj = postnumre.find(
-        (postnummer) => postnummer.nr === value.split(" ")[0]
-      );
-      setDeliveryAddress((prevState) => ({
-        ...prevState,
-        zipCode: value.split(" ")[0],
-        city: postNummerObj ? postNummerObj.navn : "",
-      }));
+      const postNummerObj = postnumre.find(postnummer => postnummer.nr === value);
+      if (postNummerObj) {
+        setDeliveryAddress(prevState => ({
+          ...prevState,
+          city: postNummerObj.navn,
+        }));
+        // Lås bynavnet
+        document.getElementById('city').setAttribute('readonly', 'readonly');
+      } else {
+        // Tillad brugeren at skrive en by, hvis postnummeret ikke findes
+        document.getElementById('city').removeAttribute('readonly');
+      }
+  
     } else {
     
     }
@@ -146,15 +162,17 @@ const Checkout = () => {
       <form onSubmit={handleSubmit}>
         
         <div>
-          <input
-            type="text"
-            name="name"
-            placeholder="Navn"
-            required
-            value={deliveryAddress.name}
-            onChange={handleInputChange}
-            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-          />
+        <input
+  type="text"
+  name="name"
+  placeholder="Navn"
+  required
+  value={deliveryAddress.name}
+  onChange={handleInputChange}
+  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+  pattern="^[A-Za-z\s'-]+$"
+  title="Navnet må kun indeholde bogstaver."
+/>
         </div>
         <div>
           <input
@@ -225,15 +243,18 @@ const Checkout = () => {
         </div>
 
         <div>
-          <input
-            type="text"
-            name="city"
-            placeholder="By"
-            required
-            value={deliveryAddress.city}
-            onChange={handleInputChange}
-            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-          />
+        <input
+  type="text"
+  name="city"
+  id="city" // Tilføjet ID her
+  placeholder="By"
+  required
+  value={deliveryAddress.city}
+  onChange={handleInputChange}
+  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+  readOnly={deliveryAddress.city !== ""}
+/>
+
         </div>
         <div>
           <input
