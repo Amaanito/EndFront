@@ -16,21 +16,15 @@ test('removeFromCart reduces quantity or removes item', () => {
   expect(newCart).toContainEqual(cart[1]);
 });
 
-test('calculateTotalPrice calculates total price correctly', () => {
+test('calculateTotalPrice calculates total price correctly with 10% discount for orders over 300 DKK', () => {
   const cart = [
     { id: 1, name: 'Product 1', price: 100, quantity: 2, rebateQuantity: 2, rebatePercent: 10 },
     { id: 2, name: 'Product 2', price: 200, quantity: 1, rebateQuantity: 0, rebatePercent: 0 },
   ];
 
-  // Calculate the expected total price manually
-  // Product 1: price = 100, quantity = 2, rebateQuantity = 2, rebatePercent = 10%
-  // Total price for product 1 = (100 * 2) - (100 * 2 * 0.1) = 200 - 20 = 180
-  // Product 2: price = 200, quantity = 1, no rebate
-  // Total price for product 2 = 200
-  // Total price = 180 + 200 = 380
-
-  const expectedTotalPrice = 380;
+  // Calculate the expected total price with a 10% discount for orders over 300 DKK
   const totalPrice = calculateTotalPrice(cart);
+  const expectedTotalPrice = ((100-10) * 2 + 200) * 0.9;
 
   // Check if the calculated total price matches the expected value
   expect(totalPrice).toBe(expectedTotalPrice);
