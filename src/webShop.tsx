@@ -155,67 +155,18 @@ export function ShoppingCart({ cart, removeFromCart }) {
     </ul>
   );
 }
-function getCsrfToken() {
-  const cookies = document.cookie.split("; ");
-  const csrfCookie = cookies.find((row) => row.startsWith("csrftoken="));
-  return csrfCookie ? csrfCookie.split("=")[1] : null;
-}
 
 export function App2() {
-  const [termsAccepted, setTermsAccepted] = React.useState(false);
-  const [receiveMarketing, setReceiveMarketing] = React.useState(false);
   const [products, setProducts] = React.useState([]);
   const [cart, setCart] = React.useState([]);
   const [totalPrice, setTotalPrice] = React.useState(0);
-  const [postnumre, setPostnumre] = React.useState([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const [error, setError] = React.useState(null);
-  const [deliveryAddress, setDeliveryAddress] = React.useState({
-    name: "",
-    email: "",
-    phone: "",
-    addressLine1: "",
-    addressLine2: "",
-    zipCode: "",
-    city: "",
-    country: "Denmark",
-    companyName: "",
-    vatNumber: "",
-  });
 
   React.useEffect(() => {
     fetch("/items.json")
       .then((response) => response.json())
       .then((data) => setProducts(data))
       .catch((error) => console.error("Error fetching data:", error));
-  }, []);
-
-  React.useEffect(() => {
-    fetch("https://api.dataforsyningen.dk/postnumre")
-      .then((response) => response.json())
-      .then((data) => {
-        setPostnumre(data);
-        setIsLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching post codes:", error);
-        setError("Kunne ikke hente postnumre.");
-        setIsLoading(false);
-      });
-  }, []);
-
-  React.useEffect(() => {
-    setIsLoading(true); // Starter indlæsningen
-    fetch("https://api.dataforsyningen.dk/postnumre")
-      .then((response) => response.json())
-      .then((data) => {
-        setPostnumre(data);
-        setIsLoading(false); // Stopper indlæsningen
-      })
-      .catch((error) => {
-        console.error("Error fetching post codes:", error);
-        setIsLoading(false); // Stopper indlæsningen ved fejl
-      });
   }, []);
 
   const addToCart = (productId) => {
@@ -275,67 +226,6 @@ export function App2() {
     alert(
       `Overvej også ${upsellProduct.name} til ${upsellProduct.price} DKK for en bedre værdi!`
     );
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-
-    if (name === "zipCode") {
-      const postNummerObj = postnumre.find(
-        (postnummer) => postnummer.nr === value.split(" ")[0]
-      );
-      setDeliveryAddress((prevState) => ({
-        ...prevState,
-        zipCode: value.split(" ")[0],
-        city: postNummerObj ? postNummerObj.navn : "",
-      }));
-    } else {
-      setDeliveryAddress((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
-    }
-  };
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!termsAccepted) {
-      alert("Du skal acceptere vilkår og betingelser for at fortsætte.");
-      return;
-    }
-    const formData = {
-      name: deliveryAddress.name,
-      email: deliveryAddress.email,
-      phone: deliveryAddress.phone,
-      addressLine1: deliveryAddress.addressLine1,
-      addressLine2: deliveryAddress.addressLine2,
-      zipCode: deliveryAddress.zipCode,
-      city: deliveryAddress.city,
-      country: deliveryAddress.country,
-      companyName: deliveryAddress.companyName,
-      vatNumber: deliveryAddress.vatNumber,
-      orderComment: e.target.orderComment.value,
-      cart,
-      totalPrice,
-      termsAccepted,
-      receiveMarketing,
-    };
-    try {
-      const response = await fetch(/*"http://127.0.0.1:8000/gem-bruger/"*/"https://eonz7flpdjy1og5.m.pipedream.net", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-CSRFToken": CsrfToken, // Inkluder CSRF-token her
-        },
-        body: JSON.stringify(formData),
-      });
-      if (response.ok) {
-        window.alert("Order submitted successfully!");
-      } else {
-        window.alert("Order submission failed!");
-      }
-    } catch (error) {
-      console.error("There was a problem with sending data:", error);
-    }
   };
 
   const scrollToShoppingCart = () => {
