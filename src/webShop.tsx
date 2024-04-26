@@ -161,7 +161,7 @@ export function App2() {
   const [cart, setCart] = React.useState([]);
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [isLoading, setIsLoading] = useState(false);
-  
+
   useEffect(() => {
     setIsLoading(true); // Start indlæsning
     fetch("/items.json")
@@ -224,7 +224,7 @@ export function App2() {
 
     return totalPrice;
   };
- 
+
   if (isLoading) {
     return <div>Indlæser...</div>;
   }
