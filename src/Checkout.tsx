@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 const Checkout = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
@@ -19,7 +20,7 @@ const Checkout = () => {
   const [postnumre, setPostnumre] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-  const [formSubmitted, setFormSubmitted] = useState(false);
+
 
   useEffect(() => {
     setIsLoading(true);
@@ -54,7 +55,7 @@ const Checkout = () => {
       }));
     }
   };
-
+  const history = useHistory();
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Validering af indtastede oplysninger
@@ -69,9 +70,9 @@ const Checkout = () => {
     ) {
       alert("Accepter vilkår og betingelser for at fortsætte.");
       return;
-    }
+    } 
     // Håndtering af formularsubmit
-    setFormSubmitted(true);
+    
     const formData = {
       name: deliveryAddress.name,
       email: deliveryAddress.email,
@@ -99,7 +100,8 @@ const Checkout = () => {
         }
       );
       if (response.ok) {
-        window.alert("Order submitted successfully!");
+        history.push("/confirm");
+        //window.alert("Order submitted successfully!");
       } else {
         window.alert("Order submission failed!");
       }
@@ -235,8 +237,8 @@ const Checkout = () => {
             name="orderComment"
             placeholder="Tilføj en kommentar til din ordre her..."
             style={{
-              width: "100%",
-              height: "150px",
+              width: "350px",
+              height: "100px",
               padding: "10px",
               boxSizing: "border-box",
             }}
@@ -299,7 +301,7 @@ const Checkout = () => {
           </label>
         </div>
 
-        {formSubmitted && <Link to="/confirm">Fortsæt til betaling →</Link>}
+        
       </form>
     </div>
   );
