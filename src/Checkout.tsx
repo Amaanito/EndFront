@@ -17,29 +17,46 @@ const Checkout = () => {
     companyName: "",
     vatNumber: "",
   });
+  const [phoneError, setPhoneError] = useState("");
   const [postnumre, setPostnumre] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
-
+  const history = useHistory();
 
   useEffect(() => {
     setIsLoading(true);
     fetch("https://api.dataforsyningen.dk/postnumre")
-      .then((response) => response.json())
-      .then((data) => {
+      .then(response => response.json())
+      .then(data => {
         setPostnumre(data);
         setIsLoading(false);
       })
-      .catch((error) => {
+      .catch(error => {
         console.error("Error fetching post codes:", error);
         setError("Kunne ikke hente postnumre");
         setIsLoading(false);
       });
   }, []);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    if (name === "zipCode") {
+    setDeliveryAddress((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  
+    // Ingen opdatering af phoneError her
+    if (name === "phone") {
+      e.target.setCustomValidity("");
+    
+      if (value && (!/^\d*$/.test(value) || value.length > 8)) {
+        setPhoneError("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
+        e.target.setCustomValidity("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
+      } else {
+        setPhoneError("");
+        e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
+      
+      }
+    } else if (name === "zipCode") {
       const postNummerObj = postnumre.find(
         (postnummer) => postnummer.nr === value.split(" ")[0]
       );
@@ -49,15 +66,28 @@ const Checkout = () => {
         city: postNummerObj ? postNummerObj.navn : "",
       }));
     } else {
-      setDeliveryAddress((prevState) => ({
-        ...prevState,
-        [name]: value,
-      }));
+    
     }
   };
-  const history = useHistory();
+
+  const handlePhoneInput = (e) => {
+    const { value } = e.target;
+    if (value && (!/^\d*$/.test(value) || value.length > 8)) {
+      // Fjernede setPhoneError opkaldet
+      e.target.setCustomValidity("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
+      e.target.reportValidity();
+    } else {
+      e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
+    }
+  };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (phoneError) {
+      alert(phoneError);
+      return;
+    }
     // Validering af indtastede oplysninger
     if (
       deliveryAddress.name.trim() === "" ||
@@ -114,6 +144,7 @@ const Checkout = () => {
     <div>
       <h1>Leverings- og faktureringsadresse</h1>
       <form onSubmit={handleSubmit}>
+        
         <div>
           <input
             type="text"
@@ -137,26 +168,32 @@ const Checkout = () => {
           />
         </div>
         <div>
-          <input
-            type="text"
-            name="phone"
-            placeholder="Telefon"
-            required
-            value={deliveryAddress.phone}
-            onChange={handleInputChange}
-            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-          />
+        <input
+  type="text"
+  name="phone"
+  placeholder="Telefon"
+  required
+  value={deliveryAddress.phone}
+  onChange={handleInputChange} // Håndterer ændring af state
+  onInput={handlePhoneInput} // Tjekker for valideringsfejl med det samme
+  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+  pattern="^\d{1,8}$"
+  title="Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
+/>
+     
         </div>
         <div>
-          <input
-            type="text"
-            name="addressLine1"
-            placeholder="Adresse linje 1"
-            required
-            value={deliveryAddress.addressLine1}
-            onChange={handleInputChange}
-            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-          />
+        <input
+  type="text"
+  name="addressLine1"
+  placeholder="Adresse linje 1"
+  required
+  value={deliveryAddress.addressLine1}
+  onChange={handleInputChange}
+  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+  title="Du skal udfylde adressefeltet."
+/>
+
         </div>
         <div>
           <input
