@@ -38,10 +38,24 @@ const Checkout = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setDeliveryAddress(prevState => ({
-      ...prevState,
-      [name]: value
-    }));
+    if (name === "zipCode") {
+      const postNummerObj = postnumre.find(
+        (postnummer) => postnummer.nr === value.split(" ")[0]
+      );
+      setDeliveryAddress((prevState) => ({
+        ...prevState,
+        zipCode: value.split(" ")[0],
+        city: postNummerObj ? postNummerObj.navn : "",
+      }));
+    } else {
+      setDeliveryAddress((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
+
+
+
   };
 
   const handleSubmit = (e) => {
