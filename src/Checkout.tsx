@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 
 const Checkout = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [marketingAccepted, setMarketingAccepted] = useState(false); // New state for marketing acceptance
   const [deliveryAddress, setDeliveryAddress] = useState({
     name: '',
     email: '',
@@ -129,21 +130,27 @@ const Checkout = () => {
           ></textarea>
         </div>
         
-        
-         <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '10px' }}>
           <div style={{ marginRight: '15px' }}>
             <Link to="/" style={{ color: 'white', textDecoration: 'none' }}>
               <button style={{ backgroundColor: 'red', color: 'white', width: '125px' }}>Tilbage</button>
-              </Link>
-              </div>
-               <div style={{ marginLeft: '10px' }}>
-                <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}>Bekræft</button>
-                </div>
-            </div>
-           <div>
+            </Link>
+          </div>
+          <div style={{ marginLeft: '10px' }}>
+            <button type="submit" style={{ backgroundColor: 'green', color: 'white', width: '125px' }}>Bekræft</button>
+          </div>
+        </div>
+        
+        <div>
           <input type="checkbox" id="terms" checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} />
           <label htmlFor="terms">Jeg accepterer vilkår og betingelser</label>
         </div>
+        
+        <div>
+          <input type="checkbox" id="marketing" checked={marketingAccepted} onChange={(e) => setMarketingAccepted(e.target.checked)} />
+          <label htmlFor="marketing">Jeg accepterer at modtage marketingsmails</label>
+        </div>
+        
         {formSubmitted && <Link to="/payment">Fortsæt til betaling →</Link>}
       </form>
     </div>
