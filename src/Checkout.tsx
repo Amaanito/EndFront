@@ -162,7 +162,8 @@ const Checkout = () => {
   };
 
   return (
-    <div>
+    
+    <div style={{ width: "100%" }}>
       <h1>Leverings- og faktureringsadresse</h1>
       <form onSubmit={handleSubmit}>
         
@@ -311,24 +312,26 @@ const Checkout = () => {
             
           ></textarea>
         </div>
+
+<div>
+  <h1>Oversigt</h1>
+  <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
+    {productsInCart.map((product) => (
+      <li key={product.id} style={{ display: "flex", maxWidth: "320px", marginBottom: "20px", outline: "1px solid #ccc", padding: "10px" }}>
+        <div style={{ marginRight: "20px" }}>
+          <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
+        </div>
         <div>
-      <h1>Dine valgte produkter</h1>
-      <ul>
-        {productsInCart.map((product) => (
-          <li key={product.id}>
-            <div>
-              <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
-            </div>
-            <div>
-              <p>{product.name}</p>
-              <p>Pris: {product.price.toFixed(2)} DKK</p>
-              <p>Antal: {product.quantity}</p>
-            </div>
-          </li>
-        ))}
-      </ul>
-   
-    </div>
+          <p style={{ margin: 0, marginBottom: "5px", fontWeight: "bold" }}>{product.name}</p>
+          <p style={{ margin: 0, marginBottom: "5px" }}>Pris: {product.price.toFixed(2)} DKK</p>
+          <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
+        </div>
+      </li>
+    ))}
+  </ul>
+</div>
+
+
         
 
         <div
@@ -336,6 +339,7 @@ const Checkout = () => {
             display: "flex",
             justifyContent: "center",
             marginBottom: "10px",
+            marginTop: "50px",
           }}
         >
           <div style={{ marginRight: "15px" }}>
