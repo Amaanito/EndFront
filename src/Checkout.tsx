@@ -1,11 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
+import { useLocation } from 'react-router-dom';
 
 const Checkout = () => {
+  const location = useLocation();
+  const { productsInCart } = location.state;
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [marketingAccepted, setMarketingAccepted] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState({
+    
     name: "",
     email: "",
     phone: "",
@@ -103,6 +107,7 @@ const Checkout = () => {
     if (phoneError) {
       alert(phoneError);
       return;
+      
     }
     // Validering af indtastede oplysninger
     if (
@@ -161,6 +166,7 @@ const Checkout = () => {
       <h1>Leverings- og faktureringsadresse</h1>
       <form onSubmit={handleSubmit}>
         
+        
         <div>
         <input
   type="text"
@@ -173,6 +179,7 @@ const Checkout = () => {
   pattern="^[A-Za-z\s'-]+$"
   title="Navnet må kun indeholde bogstaver."
 />
+
         </div>
         <div>
           <input
@@ -300,8 +307,29 @@ const Checkout = () => {
               padding: "10px",
               boxSizing: "border-box",
             }}
+
+            
           ></textarea>
         </div>
+        <div>
+      <h1>Dine valgte produkter</h1>
+      <ul>
+        {productsInCart.map((product) => (
+          <li key={product.id}>
+            <div>
+              <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
+            </div>
+            <div>
+              <p>{product.name}</p>
+              <p>Pris: {product.price.toFixed(2)} DKK</p>
+              <p>Antal: {product.quantity}</p>
+            </div>
+          </li>
+        ))}
+      </ul>
+   
+    </div>
+        
 
         <div
           style={{
