@@ -88,19 +88,17 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 }
 
 export function CartItem({ item, removeFromCart, updateQuantity }) {
+  // Beregner totalen for hver vare baseret på pris og antal
   const itemTotal = item.price * item.quantity;
+  
+  // Beregner varebaseret rabat hvis betingelserne er opfyldt
   let itemDiscount = 0;
-
   if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
-    itemDiscount = itemTotal * (item.rebatePercent / 100);
+    itemDiscount = item.price * item.quantity * (item.rebatePercent / 100);
   }
 
+  // Beregner den endelige total for varen efter rabat
   const itemFinalTotal = itemTotal - itemDiscount;
-
-  const handleQuantityChange = (e) => {
-    const newQuantity = parseInt(e.target.value);
-    updateQuantity(item.id, newQuantity);
-  };
 
   return (
     <div className="cart-item">
@@ -110,28 +108,22 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
         <p className="cart-item-price">Pris: {item.price.toFixed(2)} kr.</p>
         <div className="cart-item-quantity">
           Antal:
-          <select
-            className="quantity-select"
-            value={item.quantity}
-            onChange={handleQuantityChange}
+          <select 
+            className="quantity-select" 
+            value={item.quantity} 
+            onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}
           >
-            {[...Array(10).keys()].map((i) => (
-              <option key={i + 1} value={i + 1}>
-                {i + 1}
-              </option>
+            {[...Array(10).keys()].map(i => (
+              <option key={i + 1} value={i + 1}>{i + 1}</option>
             ))}
           </select>
         </div>
         {itemDiscount > 0 && (
-          <p className="cart-item-discount">
-            Rabat: -{itemDiscount.toFixed(2)} kr.
-          </p>
+          <p className="cart-item-discount">Rabat: -{itemDiscount.toFixed(2)} kr.</p>
         )}
-        <p className="cart-item-total-price">
-          Total: {itemFinalTotal.toFixed(2)} kr.
-        </p>
-        <button
-          className="remove-button"
+        <p className="cart-item-final-total">Total: {itemFinalTotal.toFixed(2)} kr.</p>
+        <button 
+          className="remove-button" 
           onClick={() => removeFromCart(item.id)}
         >
           Fjern
@@ -142,21 +134,53 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
 }
 
 
-export function ShoppingCart({ cart, removeFromCart }) {
-  if (cart.length === 0) {
-    return <h3> Din Indkøbsvogn er tom</h3>;
-  }
+export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
+  // Beregner subtotalen for indkøbskurven uden ordrebaseret rabat
+  const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+
+  // Beregner den samlede rabat for varerne
+  const totalItemDiscounts = cart.reduce((acc, item) => {
+    const itemTotal = item.price * item.quantity;
+    const itemDiscount = item.quantity >= item.rebateQuantity && item.rebateQuantity > 0
+      ? itemTotal * (item.rebatePercent / 100)
+      : 0;
+    return acc + itemDiscount;
+  }, 0);
+
+  // Tjekker om subtotalen kvalificerer til en ordrebaseret rabat
+  const orderDiscount = subtotal > 300 ? subtotal * 0.1 : 0;
+
+  // Beregner den totale pris med alle rabatter
+  const total = subtotal - totalItemDiscounts - orderDiscount;
+
   return (
-    <ul>
-      {cart.map((item) => (
-        <CartItem
-          key={item.id}
-          item={item}
-          removeFromCart={removeFromCart}
-          updateQuantity={undefined}
-        />
-      ))}
-    </ul>
+    <div>
+      {cart.length === 0 ? (
+        <h3>Din Indskøbsvogn er tom</h3>
+      ) : (
+        <ul>
+          {cart.map((item) => (
+            <CartItem
+              key={item.id}
+              item={item}
+              removeFromCart={removeFromCart}
+              updateQuantity={updateQuantity} // Sørg for at give en reel funktion her
+            />
+          ))}
+          <li className="cart-summary">
+            {totalItemDiscounts > 0 && (
+              <p>Total varebaseret rabat: -{totalItemDiscounts.toFixed(2)} DKK</p>
+            )}
+            {orderDiscount > 0 && (
+              <p>Ordrebaseret rabat: -{orderDiscount.toFixed(2)} DKK</p>
+            )}
+            <p>Subtotal: {subtotal.toFixed(2)} DKK</p>
+            <p className="order-total">Total: {total.toFixed(2)} DKK</p>
+          </li>
+
+        </ul>
+      )}
+    </div>
   );
 }
 
@@ -297,7 +321,6 @@ export function App2() {
 
       <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
       <h3>
-        Total Pris: <span>{totalPrice.toFixed(2)} DKK</span>
       </h3>
 
       <div
