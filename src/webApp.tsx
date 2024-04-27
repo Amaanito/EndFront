@@ -172,7 +172,7 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
               <p>Total varebaseret rabat: -{totalItemDiscounts.toFixed(2)} DKK</p>
             )}
             {orderDiscount > 0 && (
-              <p>Ordrebaseret rabat: -{orderDiscount.toFixed(2)} DKK</p>
+              <p>Ordrebaseret rabat (over 300 DKK): -{orderDiscount.toFixed(2)} DKK</p>
             )}
             <p>Subtotal: {subtotal.toFixed(2)} DKK</p>
             <p className="order-total">Total: {total.toFixed(2)} DKK</p>

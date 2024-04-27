@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
-import { CartItem, ProductList } from "./webApp";
 
 
 const Checkout = () => {
@@ -167,6 +166,7 @@ const Checkout = () => {
   const calculateTotalPrice = (cart) => {
     let totalPrice = 0;
     let totalDiscount = 0;
+    let orderDiscount = 0;
 
     cart.forEach((item) => {
       let itemTotal = item.price * item.quantity;
@@ -182,11 +182,14 @@ const Checkout = () => {
     });
 
     if (totalPrice > 300) {
-      totalPrice *= 0.9;
+      orderDiscount = totalPrice * 0.1; // 10% order-based discount
     }
 
-    return { totalPrice, totalDiscount };
+    totalPrice -= orderDiscount;
+
+    return { totalPrice, totalDiscount, orderDiscount, subtotal: totalPrice + totalDiscount };
   };
+  const totalPriceInfo = calculateTotalPrice(productsInCart);
 
 
 
@@ -345,39 +348,43 @@ const Checkout = () => {
         </div>
 
         <div>
-          <h1>Kurv</h1>
-          <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
-            {productsInCart.map((product) => (
-              <li key={product.id} style={{ display: "flex", maxWidth: "320px", marginBottom: "20px", outline: "1px solid #ccc", padding: "10px" }}>
-                <div style={{ marginRight: "20px" }}>
-                  <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
-                </div>
-                <div>
-                  <p style={{ margin: 0, marginBottom: "5px", fontWeight: "bold" }}>{product.name}</p>
-                  <p style={{ margin: 0, marginBottom: "5px" }}>Pris: {product.price.toFixed(2)} DKK</p>
-                  <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
-                  {product.quantity >= product.rebateQuantity && product.rebateQuantity > 0 && (
-                    <p className="cart-item-discount">
-                      Rabat: -{(product.price * product.quantity * (product.rebatePercent / 100)).toFixed(2)} kr.
-                    </p>
-                  )}
-                </div>
-              </li>
-            ))}
-          </ul>
-          <h3>
-      Pris før 10% rabat: {calculateTotalPrice(productsInCart).totalPrice.toFixed(2)} DKK
-    </h3>
-    {calculateTotalPrice(productsInCart).totalDiscount > 0 && (
-      <p className="total-discount" style={{ color: "orange" }}>
-        Samlet rabat: -{calculateTotalPrice(productsInCart).totalDiscount.toFixed(2)} DKK
-      </p>
-    )}
-    <h3>
-      Pris efter 10% rabat: {(calculateTotalPrice(productsInCart).totalPrice - calculateTotalPrice(productsInCart).totalDiscount).toFixed(2)} DKK
-    </h3>
-        </div>
-
+        <h1>Kurv</h1>
+        <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
+          {productsInCart.map((product) => (
+            <li key={product.id} style={{ display: "flex", maxWidth: "320px", marginBottom: "20px", outline: "1px solid #ccc", padding: "10px" }}>
+              <div style={{ marginRight: "20px" }}>
+                <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
+              </div>
+              <div>
+                <p style={{ margin: 0, marginBottom: "5px", fontWeight: "bold" }}>{product.name}</p>
+                <p style={{ margin: 0, marginBottom: "5px" }}>Pris: {product.price.toFixed(2)} DKK</p>
+                <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
+                {product.quantity >= product.rebateQuantity && product.rebateQuantity > 0 && (
+                  <p className="cart-item-discount">
+                    Rabat: -{(product.price * product.quantity * (product.rebatePercent / 100)).toFixed(2)} kr.
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <h3>
+          Subtotal: {totalPriceInfo.subtotal.toFixed(2)} DKK
+        </h3>
+        {totalPriceInfo.totalDiscount > 0 && (
+          <p className="total-discount" style={{ color: "orange" }}>
+            Total varebaseret rabat: -{totalPriceInfo.totalDiscount.toFixed(2)} DKK
+          </p>
+        )}
+        {totalPriceInfo.orderDiscount > 0 && (
+          <p className="order-discount" style={{ color: "orange" }}>
+            Ordrebaseret rabat (over 300 DKK): -{totalPriceInfo.orderDiscount.toFixed(2)} DKK
+          </p>
+        )}
+        <h3>
+          Total: {totalPriceInfo.totalPrice.toFixed(2)} DKK
+        </h3>
+      </div>
 
 
 
