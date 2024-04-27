@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
+import { CartItem, ProductList } from "./webApp";
+
 
 const Checkout = () => {
   const location = useLocation();
@@ -9,7 +11,7 @@ const Checkout = () => {
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [marketingAccepted, setMarketingAccepted] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState({
-    
+
     name: "",
     email: "",
     phone: "",
@@ -57,19 +59,19 @@ const Checkout = () => {
     } else if (name === "phone") {
       e.target.setCustomValidity("");
     }
-  
-  
+
+
     // Ingen opdatering af phoneError her
     if (name === "phone") {
       e.target.setCustomValidity("");
-    
+
       if (value && (!/^\d*$/.test(value) || value.length > 8)) {
         setPhoneError("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
         e.target.setCustomValidity("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
       } else {
         setPhoneError("");
         e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
-      
+
       }
     } else if (name === "zipCode") {
       const postNummerObj = postnumre.find(postnummer => postnummer.nr === value);
@@ -84,9 +86,9 @@ const Checkout = () => {
         // Tillad brugeren at skrive en by, hvis postnummeret ikke findes
         document.getElementById('city').removeAttribute('readonly');
       }
-  
+
     } else {
-    
+
     }
   };
 
@@ -107,7 +109,7 @@ const Checkout = () => {
     if (phoneError) {
       alert(phoneError);
       return;
-      
+
     }
     // Validering af indtastede oplysninger
     if (
@@ -121,9 +123,9 @@ const Checkout = () => {
     ) {
       alert("Accepter vilkår og betingelser for at fortsætte.");
       return;
-    } 
+    }
     // Håndtering af formularsubmit
-    
+
     const formData = {
       name: deliveryAddress.name,
       email: deliveryAddress.email,
@@ -138,6 +140,7 @@ const Checkout = () => {
       orderComment: e.target.orderComment.value,
       termsAccepted,
       marketingAccepted,
+      productsInCart
     };
     try {
       const response = await fetch(
@@ -161,25 +164,53 @@ const Checkout = () => {
     }
   };
 
+  const calculateTotalPrice = (cart) => {
+    let totalPrice = 0;
+    let totalDiscount = 0;
+
+    cart.forEach((item) => {
+      let itemTotal = item.price * item.quantity;
+      let itemDiscount = 0;
+
+      if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
+        itemDiscount = itemTotal * (item.rebatePercent / 100);
+        totalDiscount += itemDiscount;
+      }
+
+      itemTotal -= itemDiscount;
+      totalPrice += itemTotal;
+    });
+
+    if (totalPrice > 300) {
+      totalPrice *= 0.9;
+    }
+
+    return { totalPrice, totalDiscount };
+  };
+
+
+
   return (
-    
+
+
+
     <div style={{ width: "100%" }}>
       <h1>Leverings- og faktureringsadresse</h1>
       <form onSubmit={handleSubmit}>
-        
-        
+
+
         <div>
-        <input
-  type="text"
-  name="name"
-  placeholder="Navn"
-  required
-  value={deliveryAddress.name}
-  onChange={handleInputChange}
-  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-  pattern="^[A-Za-z\s'-]+$"
-  title="Navnet må kun indeholde bogstaver."
-/>
+          <input
+            type="text"
+            name="name"
+            placeholder="Navn"
+            required
+            value={deliveryAddress.name}
+            onChange={handleInputChange}
+            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+            pattern="^[A-Za-z\s'-]+$"
+            title="Navnet må kun indeholde bogstaver."
+          />
 
         </div>
         <div>
@@ -194,31 +225,31 @@ const Checkout = () => {
           />
         </div>
         <div>
-        <input
-  type="text"
-  name="phone"
-  placeholder="Telefon"
-  required
-  value={deliveryAddress.phone}
-  onChange={handleInputChange} // Håndterer ændring af state
-  onInput={handlePhoneInput} // Tjekker for valideringsfejl med det samme
-  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-  pattern="^\d{1,8}$"
-  title="Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
-/>
-     
+          <input
+            type="text"
+            name="phone"
+            placeholder="Telefon"
+            required
+            value={deliveryAddress.phone}
+            onChange={handleInputChange} // Håndterer ændring af state
+            onInput={handlePhoneInput} // Tjekker for valideringsfejl med det samme
+            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+            pattern="^\d{1,8}$"
+            title="Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
+          />
+
         </div>
         <div>
-        <input
-  type="text"
-  name="addressLine1"
-  placeholder="Adresse linje 1"
-  required
-  value={deliveryAddress.addressLine1}
-  onChange={handleInputChange}
-  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-  title="Du skal udfylde adressefeltet."
-/>
+          <input
+            type="text"
+            name="addressLine1"
+            placeholder="Adresse linje 1"
+            required
+            value={deliveryAddress.addressLine1}
+            onChange={handleInputChange}
+            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+            title="Du skal udfylde adressefeltet."
+          />
 
         </div>
         <div>
@@ -251,17 +282,17 @@ const Checkout = () => {
         </div>
 
         <div>
-        <input
-  type="text"
-  name="city"
-  id="city" // Tilføjet ID her
-  placeholder="By"
-  required
-  value={deliveryAddress.city}
-  onChange={handleInputChange}
-  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-  readOnly={deliveryAddress.city !== ""}
-/>
+          <input
+            type="text"
+            name="city"
+            id="city" // Tilføjet ID her
+            placeholder="By"
+            required
+            value={deliveryAddress.city}
+            onChange={handleInputChange}
+            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+            readOnly={deliveryAddress.city !== ""}
+          />
 
         </div>
         <div>
@@ -309,30 +340,46 @@ const Checkout = () => {
               boxSizing: "border-box",
             }}
 
-            
+
           ></textarea>
         </div>
 
-<div>
-  <h1>Oversigt</h1>
-  <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
-    {productsInCart.map((product) => (
-      <li key={product.id} style={{ display: "flex", maxWidth: "320px", marginBottom: "20px", outline: "1px solid #ccc", padding: "10px" }}>
-        <div style={{ marginRight: "20px" }}>
-          <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
-        </div>
         <div>
-          <p style={{ margin: 0, marginBottom: "5px", fontWeight: "bold" }}>{product.name}</p>
-          <p style={{ margin: 0, marginBottom: "5px" }}>Pris: {product.price.toFixed(2)} DKK</p>
-          <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
+          <h1>Kurv</h1>
+          <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
+            {productsInCart.map((product) => (
+              <li key={product.id} style={{ display: "flex", maxWidth: "320px", marginBottom: "20px", outline: "1px solid #ccc", padding: "10px" }}>
+                <div style={{ marginRight: "20px" }}>
+                  <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
+                </div>
+                <div>
+                  <p style={{ margin: 0, marginBottom: "5px", fontWeight: "bold" }}>{product.name}</p>
+                  <p style={{ margin: 0, marginBottom: "5px" }}>Pris: {product.price.toFixed(2)} DKK</p>
+                  <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
+                  {product.quantity >= product.rebateQuantity && product.rebateQuantity > 0 && (
+                    <p className="cart-item-discount">
+                      Rabat: -{(product.price * product.quantity * (product.rebatePercent / 100)).toFixed(2)} kr.
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ul>
+          <h3>
+      Pris før 10% rabat: {calculateTotalPrice(productsInCart).totalPrice.toFixed(2)} DKK
+    </h3>
+    {calculateTotalPrice(productsInCart).totalDiscount > 0 && (
+      <p className="total-discount" style={{ color: "orange" }}>
+        Samlet rabat: -{calculateTotalPrice(productsInCart).totalDiscount.toFixed(2)} DKK
+      </p>
+    )}
+    <h3>
+      Pris efter 10% rabat: {(calculateTotalPrice(productsInCart).totalPrice - calculateTotalPrice(productsInCart).totalDiscount).toFixed(2)} DKK
+    </h3>
         </div>
-      </li>
-    ))}
-  </ul>
-</div>
 
 
-        
+
 
         <div
           style={{
@@ -391,7 +438,7 @@ const Checkout = () => {
           </label>
         </div>
 
-        
+
       </form>
     </div>
   );
