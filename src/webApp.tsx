@@ -259,6 +259,14 @@ export function App2() {
     setTotalPrice(calculateTotalPrice(newCart));
   };
 
+  const updateQuantity = (productId, quantity) => {
+    setCart(prevCart => {
+      return prevCart.map(item =>
+        item.id === productId ? { ...item, quantity } : item
+      );
+    });
+  };
+
   const calculateTotalPrice = (cart) => {
     let totalPrice = 0;
     cart.forEach((item) => {
@@ -334,7 +342,8 @@ export function App2() {
 
       <h1 id="shopping-cart">Indkøbsvogn</h1>
 
-      <ShoppingCart cart={cart} removeFromCart={removeFromCart} />
+      <ShoppingCart cart={cart} removeFromCart={removeFromCart}
+  updateQuantity={updateQuantity} />
       <h3>
       </h3>
 
