@@ -167,33 +167,28 @@ const Checkout = () => {
       console.error("There was a problem with sending data:", error);
     }
   };
-
   const calculateTotalPrice = (cart) => {
-    let totalPrice = 0;
+    let subtotal = 0;
     let totalDiscount = 0;
     let orderDiscount = 0;
 
     cart.forEach((item) => {
-      let itemTotal = item.price * item.quantity;
-      let itemDiscount = 0;
+      subtotal += item.price * item.quantity;
 
       if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
-        itemDiscount = itemTotal * (item.rebatePercent / 100);
-        totalDiscount += itemDiscount;
+        totalDiscount += item.quantity * (item.price * (item.rebatePercent / 100));
       }
-
-      itemTotal -= itemDiscount;
-      totalPrice += itemTotal;
     });
 
-    if (totalPrice > 300) {
-      orderDiscount = totalPrice * 0.1; // 10% order-based discount
+    if (subtotal > 300) {
+      orderDiscount = subtotal * 0.1; // 10% order-based discount
     }
 
-    totalPrice -= orderDiscount;
+    const totalPrice = subtotal - totalDiscount - orderDiscount;
 
-    return { totalPrice, totalDiscount, orderDiscount, subtotal: totalPrice + totalDiscount };
+    return { subtotal, totalDiscount, orderDiscount, totalPrice };
   };
+
   const totalPriceInfo = calculateTotalPrice(productsInCart);
 
 
@@ -366,7 +361,7 @@ const Checkout = () => {
                 <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
                 {product.quantity >= product.rebateQuantity && product.rebateQuantity > 0 && (
                   <p className="cart-item-discount">
-                    Rabat: -{(product.price * product.quantity * (product.rebatePercent / 100)).toFixed(2)} kr.
+                    Rabat: -{(product.quantity * (product.price * (product.rebatePercent / 100))).toFixed(2)} kr.
                   </p>
                 )}
               </div>

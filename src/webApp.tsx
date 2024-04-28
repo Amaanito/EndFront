@@ -287,6 +287,7 @@ export function App2() {
 
   return (
     <div style={{ margin: -40 }}>
+       {isLoading && <div data-testid="loading-indicator">Loading...</div>}
       <h1
         style={{
           maxWidth: "100%",
