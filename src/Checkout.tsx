@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom";
 import { useLocation } from 'react-router-dom';
 
 
+
 const Checkout = () => {
   const location = useLocation();
   const { productsInCart } = location.state;
@@ -203,6 +204,7 @@ const Checkout = () => {
 
 
         <div>
+
           <input
             type="text"
             name="name"
@@ -424,6 +426,8 @@ const Checkout = () => {
             </button>
           </div>
         </div>
+
+
 
         <div>
           <input

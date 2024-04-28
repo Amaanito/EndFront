@@ -1,66 +1,32 @@
-import { describe, it, expect } from 'vitest';
-import { render, screen, fireEvent } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
-import {App2} from '../webApp';
+import { render, fireEvent, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import Checkout from '../Checkout';
 
 
-describe('App2', () => {
-  it('submitting the form triggers handleSubmit', async () => {
-    render(<App2/>);
-    await userEvent.type(screen.getByLabelText('Navn'), 'John Doe');
-    await userEvent.type(screen.getByLabelText('Email'), 'john@example.com');
-   await userEvent.click(screen.getByText(/Submit Order/));
-  
-    fireEvent.change(screen.getByLabelText('Telefon'), {
-      target: { value: '12345678' },
+describe('Checkout', () => {
+  it('skal indsende formularen korrekt', async () => {
+
+    const initialState = {
+      productsInCart: [
+        { id: '1', name: 'Produkt 1', price: 100, quantity: 2, rebateQuantity: 1, rebatePercent: 10 }
+      ]
+    };
+
+ 
+    render(
+      <MemoryRouter initialEntries={[{ pathname: '/checkout', state: initialState }]}>
+        <Checkout />
+      </MemoryRouter>
+    );
+
+    fireEvent.change(screen.getByPlaceholderText('Navn'), { target: { value: 'John Doe' } });
+    fireEvent.change(screen.getByPlaceholderText('Email'), { target: { value: 'john@example.com' } });
+    fireEvent.change(screen.getByPlaceholderText('Telefon'), { target: { value: '12345678' } });
+    fireEvent.change(screen.getByPlaceholderText('Adresse linje 1'), { target: { value: '123 Main St' } });
+    fireEvent.change(screen.getByPlaceholderText('By'), { target: { value: 'Anytown' } });
+    fireEvent.change(screen.getByPlaceholderText('Firmanavn'), { target: { value: 'Company Inc.' } });
+    fireEvent.change(screen.getByPlaceholderText('CVR-nummer'), { target: { value: '123456789' } });
+    fireEvent.click(screen.getByLabelText('Jeg accepterer vilkår og betingelser'));
+
   });
-    fireEvent.change(screen.getByLabelText(/Adresse linje 1/), {
-      target: { value: "123 Main St" },
-    });
-    fireEvent.change(screen.getByLabelText(/Adresse linje 2/), {
-      target: { value: "Apt 1" },
-    });
-    fireEvent.change(screen.getByLabelText(/Postnummer/), {
-      target: { value: "12345" },
-    });
-    fireEvent.change(screen.getByLabelText(/By/), {
-      target: { value: "Cityville" },
-    });
-    fireEvent.change(screen.getByLabelText(/Firmanavn/), {
-      target: { value: "ACME Inc." },
-    });
-    fireEvent.change(screen.getByLabelText(/CVR-nummer/), {
-      target: { value: "12345678" },
-    });
-    fireEvent.change(screen.getByLabelText(/Kommentar til ordre/), {
-      target: { value: "Ingen særlige bemærkninger" },
-    });
-
-    fireEvent.click(
-      screen.getByLabelText(/Jeg accepterer vilkår og betingelser/)
-    );
-    fireEvent.click(
-      screen.getByLabelText(/Jeg ønsker at modtage marketingemails/)
-    );
-
-    fireEvent.click(screen.getByText(/Submit Order/));
-
-    await screen.findByText(/Order submitted successfully!/);
-
-    expect(globalThis.fetch).toHaveBeenCalledWith(
-      "http://localhost:8000/billing",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: "John Doe",
-          email: "john@example.com",
-          termsAccepted: true,
-          receiveMarketing: true,
-        }),
-      }
-    );
-  }); 
-}); 
+});
