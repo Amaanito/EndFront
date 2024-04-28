@@ -142,7 +142,8 @@ const Checkout = () => {
       orderComment: e.target.orderComment.value,
       termsAccepted,
       marketingAccepted,
-      productsInCart
+      productsInCart,
+      totalPriceInfo
     };
     try {
       const response = await fetch(
