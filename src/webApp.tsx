@@ -358,7 +358,7 @@ export function App2() {
   >
     {isLoading ? "Indlæser..." : "Gå til kassen"}
   </button>
-  {isLoading && <p style={{ textAlign: 'center' }}>Indlæser, vent venligst...</p>}
+  {isLoading && <p style={{ textAlign: 'center' }}></p>}
 </div>
     </div>
   );
