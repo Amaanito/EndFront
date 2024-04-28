@@ -1,18 +1,15 @@
-import { render, fireEvent, screen } from '@testing-library/react';
+import { render, fireEvent, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import Checkout from '../Checkout';
 
-
 describe('Checkout', () => {
-  it('skal indsende formularen korrekt', async () => {
-
+  it('submitting the form triggers handleSubmit', async () => {
     const initialState = {
       productsInCart: [
         { id: '1', name: 'Produkt 1', price: 100, quantity: 2, rebateQuantity: 1, rebatePercent: 10 }
       ]
     };
 
- 
     render(
       <MemoryRouter initialEntries={[{ pathname: '/checkout', state: initialState }]}>
         <Checkout />
@@ -27,6 +24,10 @@ describe('Checkout', () => {
     fireEvent.change(screen.getByPlaceholderText('Firmanavn'), { target: { value: 'Company Inc.' } });
     fireEvent.change(screen.getByPlaceholderText('CVR-nummer'), { target: { value: '123456789' } });
     fireEvent.click(screen.getByLabelText('Jeg accepterer vilkår og betingelser'));
+    fireEvent.click(screen.getByText('submit order'));
 
+    await waitFor(() => {
+      expect(screen.getByText('Tak for din ordre')).toBeInTheDocument();
+    });
   });
 });
