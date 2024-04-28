@@ -108,9 +108,8 @@ const Checkout = () => {
     if (phoneError) {
       alert(phoneError);
       return;
-
     }
-    // Validering af indtastede oplysninger
+
     if (
       deliveryAddress.name.trim() === "" ||
       deliveryAddress.email.trim() === "" ||
@@ -122,8 +121,11 @@ const Checkout = () => {
     ) {
       alert("Accepter vilkår og betingelser for at fortsætte.");
       return;
+
+      
     }
-    // Håndtering af formularsubmit
+    setIsLoading(true);
+
 
     const formData = {
       name: deliveryAddress.name,
@@ -153,12 +155,15 @@ const Checkout = () => {
         }
       );
       if (response.ok) {
+        setIsLoading(false);
         history.push("/confirm");
-        //window.alert("Order submitted successfully!");
+        
       } else {
+        setIsLoading(false);
         window.alert("Order submission failed!");
       }
     } catch (error) {
+      setIsLoading(false);
       console.error("There was a problem with sending data:", error);
     }
   };
@@ -280,7 +285,7 @@ const Checkout = () => {
               </option>
             ))}
           </select>
-          {isLoading && <p>Postnumre indlæses...</p>}
+   
           {error && <p>{error}</p>}
         </div>
 
@@ -417,8 +422,10 @@ const Checkout = () => {
                 color: "white",
                 width: "125px",
               }}
+              disabled={isLoading}
             >
-              Bekræft
+                {isLoading ? "Indlæser..." : "Bekræft"}
+         
             </button>
           </div>
         </div>
