@@ -335,36 +335,43 @@ export function App2() {
       </h3>
 
       <div
-        style={{
-          textAlign: "right",
-          marginRight: "150px",
-          marginTop: "80px",
-          marginBottom: "80px",
-        }}
-      >
-       <Link
-  to={{
-    pathname: "/checkout",
-    state: { productsInCart: cart }, // Overfør kurvens indhold som en del af state-objektet
+
+
+
+  style={{
+    textAlign: "right",
+    marginRight: "150px",
+    marginTop: "80px",
+    marginBottom: "80px",
   }}
 >
-          <button
-            style={{
-              backgroundColor: isCartEmpty ? "#ccc" : "green",
-              color: "white",
-              width: "125px",
-            }}
-            onClick={() => {
-              if (isCartEmpty) {
-                alert("Du skal vælge mindst én vare, før du kan gå til kassen.");
-              }
-            }}
-            
-          >
-            Gå til kassen
-          </button>
-        </Link>
-      </div>
+  <Link
+    to={!isCartEmpty ? {
+      pathname: "/checkout",
+      state: { productsInCart: cart }, // Overfør kurvens indhold som en del af state-objektet
+    } : null}
+  >
+    <button
+      style={{
+        backgroundColor: isCartEmpty ? "#ccc" : "green",
+        color: "white",
+        width: "125px",
+      }}
+      onClick={() => {
+        if (isCartEmpty) {
+          alert("Du skal vælge mindst én vare, før du kan gå til kassen.");
+        }
+      }}
+    >
+      Gå til kassen
+    </button>
+  </Link>
+</div>
+
+
+
+
+
     </div>
   );
 }
