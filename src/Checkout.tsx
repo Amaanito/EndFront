@@ -204,7 +204,7 @@ const Checkout = () => {
 
 
         <div>
-
+          
           <input
             type="text"
             name="name"
