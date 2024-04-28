@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useHistory } from "react-router-dom";
-
+import { Link } from "react-router-dom";
 
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
@@ -173,7 +172,7 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
               <p>Total varebaseret rabat: -{totalItemDiscounts.toFixed(2)} DKK</p>
             )}
             {orderDiscount > 0 && (
-              <p>Ordrebaseret rabat (over 300 DKK): -{orderDiscount.toFixed(2)} DKK</p>
+              <p>Ordrebaseret rabat: -{orderDiscount.toFixed(2)} DKK</p>
             )}
             <p>Subtotal: {subtotal.toFixed(2)} DKK</p>
             <p className="order-total">Total: {total.toFixed(2)} DKK</p>
@@ -193,10 +192,9 @@ export function App2() {
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isCartEmpty, setIsCartEmpty] = useState(true);
-  const history = useHistory();
-
 
   useEffect(() => {
+    setIsLoading(true);
     fetch("/items.json")
       .then((response) => response.json())
       .then((data) => {
@@ -212,19 +210,6 @@ export function App2() {
   useEffect(() => {
     setIsCartEmpty(cart.length === 0);
   }, [cart]);
-
-  const handleGoToCheckout = () => {
-    if (isCartEmpty) {
-      alert("Du skal vælge mindst én vare, før du kan gå til kassen.");
-    } else {
-      setIsLoading(true); // Starter indlæsningen
-      // Simulerer en forsinkelse, f.eks. til dataindlæsning
-      setTimeout(() => {
-        history.push('/checkout', { productsInCart: cart });
-        setIsLoading(false); // Stopper indlæsningen efter navigationen
-      }, 2000);
-    }
-  };
 
   const addToCart = (productId) => {
     const productToAdd = products.find((product) => product.id === productId);
@@ -266,6 +251,7 @@ export function App2() {
       );
     });
   };
+
 
   const calculateTotalPrice = (cart) => {
     let totalPrice = 0;
@@ -343,34 +329,43 @@ export function App2() {
       <h1 id="shopping-cart">Indkøbsvogn</h1>
 
       <ShoppingCart cart={cart} removeFromCart={removeFromCart}
-  updateQuantity={updateQuantity} />
+        // Tilføj denne prop
+        updateQuantity={updateQuantity} />
       <h3>
       </h3>
 
       <div
-      
-      style={{
-        textAlign: "right",
-        marginRight: "150px",
-        marginTop: "80px",
-        marginBottom: "80px",
-      }}
+        style={{
+          textAlign: "right",
+          marginRight: "150px",
+          marginTop: "80px",
+          marginBottom: "80px",
+        }}
       >
-<button
-    style={{
-      backgroundColor: isCartEmpty ? "#ccc" : "green",
-      color: "white",
-      width: "125px",
-    }}
-    onClick={handleGoToCheckout}
-    disabled={isLoading}
-  >
-    {isLoading ? "Indlæser..." : "Gå til kassen"}
-  </button>
-  {isLoading && <p style={{ textAlign: 'center' }}></p>}
-</div>
+       <Link
+  to={{
+    pathname: "/checkout",
+    state: { productsInCart: cart }, // Overfør kurvens indhold som en del af state-objektet
+  }}
+>
+          <button
+            style={{
+              backgroundColor: isCartEmpty ? "#ccc" : "green",
+              color: "white",
+              width: "125px",
+            }}
+            onClick={() => {
+              if (isCartEmpty) {
+                alert("Du skal vælge mindst én vare, før du kan gå til kassen.");
+              }
+            }}
+            
+          >
+            Gå til kassen
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }
-
 export default App2;
