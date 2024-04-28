@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
+
 
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
@@ -192,9 +193,10 @@ export function App2() {
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isCartEmpty, setIsCartEmpty] = useState(true);
+  const history = useHistory();
+
 
   useEffect(() => {
-    setIsLoading(true);
     fetch("/items.json")
       .then((response) => response.json())
       .then((data) => {
@@ -210,6 +212,19 @@ export function App2() {
   useEffect(() => {
     setIsCartEmpty(cart.length === 0);
   }, [cart]);
+
+  const handleGoToCheckout = () => {
+    if (isCartEmpty) {
+      alert("Du skal vælge mindst én vare, før du kan gå til kassen.");
+    } else {
+      setIsLoading(true); // Starter indlæsningen
+      // Simulerer en forsinkelse, f.eks. til dataindlæsning
+      setTimeout(() => {
+        history.push('/checkout', { productsInCart: cart });
+        setIsLoading(false); // Stopper indlæsningen efter navigationen
+      }, 2000);
+    }
+  };
 
   const addToCart = (productId) => {
     const productToAdd = products.find((product) => product.id === productId);
@@ -324,37 +339,29 @@ export function App2() {
       </h3>
 
       <div
-        style={{
-          textAlign: "right",
-          marginRight: "150px",
-          marginTop: "80px",
-          marginBottom: "80px",
-        }}
+      
+      style={{
+        textAlign: "right",
+        marginRight: "150px",
+        marginTop: "80px",
+        marginBottom: "80px",
+      }}
       >
-       <Link
-  to={{
-    pathname: "/checkout",
-    state: { productsInCart: cart }, // Overfør kurvens indhold som en del af state-objektet
-  }}
->
-          <button
-            style={{
-              backgroundColor: isCartEmpty ? "#ccc" : "green",
-              color: "white",
-              width: "125px",
-            }}
-            onClick={() => {
-              if (isCartEmpty) {
-                alert("Du skal vælge mindst én vare, før du kan gå til kassen.");
-              }
-            }}
-            
-          >
-            Gå til kassen
-          </button>
-        </Link>
-      </div>
+<button
+    style={{
+      backgroundColor: isCartEmpty ? "#ccc" : "green",
+      color: "white",
+      width: "125px",
+    }}
+    onClick={handleGoToCheckout}
+    disabled={isLoading}
+  >
+    {isLoading ? "Indlæser..." : "Gå til kassen"}
+  </button>
+  {isLoading && <p style={{ textAlign: 'center' }}>Indlæser, vent venligst...</p>}
+</div>
     </div>
   );
 }
+
 export default App2;
