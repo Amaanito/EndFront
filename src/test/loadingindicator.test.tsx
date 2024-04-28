@@ -1,11 +1,18 @@
-import { describe, it, expect, } from 'vitest';
-import { render } from '@testing-library/react';
+import { describe, it } from 'vitest';
+import { render,screen } from '@testing-library/react';
 import {App2} from '../webApp';
 import '@testing-library/jest-dom'
+import { MemoryRouter } from 'react-router-dom';
+
+
 
 describe('App2', () => {
-  it('should render loading indicator when isLoading is true', () => {
-    const { getByTestId } = render(<App2/>);
-    expect(getByTestId('loading-indicator')).toBeInTheDocument();
+  it('renders loading indicator when isLoading is true', () => {
+    render(
+      <MemoryRouter>
+        <App2 />
+      </MemoryRouter>
+    );
+    expect(screen.getByTestId('loading-indicator')).toBeInTheDocument();
   });
 });
