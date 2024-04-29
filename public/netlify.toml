@@ -1,4 +1,0 @@
-[[redirects]]
-  from = "/*"
-  to = "/Checkout"
-  status = 301
