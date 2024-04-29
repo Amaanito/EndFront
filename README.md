@@ -22,7 +22,7 @@ Ordreafgivelse:
 -	Indsendelse af ordreoplysninger til et endpoint.
 
 Teknologier
--	Frontend Framework: React med TypeScript og Javascript.
+-Sprog/Framework: HTML, React med TypeScript og Javascript.
 -	Styling: CSS med fokus på design og tilgængelighed.
 -	Routing: Anvendelse af React Router for navigation og håndtering af browserens tilbage og fremknapper.
 
