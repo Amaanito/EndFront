@@ -28,21 +28,28 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const history = useHistory();
-
+  
   useEffect(() => {
-    setIsLoading(true);
-    fetch("https://api.dataforsyningen.dk/postnumre")
-      .then(response => response.json())
-      .then(data => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("https://api.dataforsyningen.dk/postnumre");
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+        const data = await response.json();
         setPostnumre(data);
         setIsLoading(false);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error("Error fetching post codes:", error);
         setError("Kunne ikke hente postnumre");
         setIsLoading(false);
-      });
+      }
+    };
+  
+    fetchData();
   }, []);
+  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setDeliveryAddress((prevState) => ({

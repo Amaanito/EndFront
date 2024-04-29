@@ -189,18 +189,25 @@ export function App2() {
   const [isCartEmpty, setIsCartEmpty] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch("/items.json")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/items.json");
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+        const data = await response.json();
         setProducts(data);
         setIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching data:", error);
         setIsLoading(false);
-      });
+      }
+    };
+  
+    fetchData();
   }, []);
+  
 
   useEffect(() => {
     setIsCartEmpty(cart.length === 0);
