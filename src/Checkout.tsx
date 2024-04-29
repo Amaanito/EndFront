@@ -372,7 +372,9 @@ const Checkout = () => {
 
         <div>
           <h1>Kurv</h1>
+
           <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
+            
             {productsInCart && productsInCart.length > 0 ? (
               productsInCart.map((product) => (
                 <li
@@ -421,7 +423,10 @@ const Checkout = () => {
                 </li>
               ))
             ) : (
+              <ul style={{ listStyleType: "none", marginRight: "285px", textAlign: "center" }}>
+              
               <li>Ingen produkter i kurven</li>
+              </ul>
             )}
           </ul>
           <h3>Subtotal: {totalPriceInfo.subtotal.toFixed(2)} DKK</h3>
