@@ -1,0 +1,4 @@
+[[redirects]]
+  from = "/*"
+  to = "/checkout"
+  status = 200
