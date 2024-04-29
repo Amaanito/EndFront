@@ -1,0 +1,8 @@
+[build]
+  command = "npm run build" # Dette er kommandoen til at bygge din React-app
+  publish = "build/" # Dette er mappen, hvor din byggede app vil blive placeret
+
+[[redirects]] # Dette opretter en redirect-regel, der sikrer, at alle stier leder til din index.html-fil
+  from = "/*"
+  to = "/index.html"
+  status = 200

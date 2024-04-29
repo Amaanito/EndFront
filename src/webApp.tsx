@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
+
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
   const columnWidth = `calc(100% / ${numProductsPerRow} - 15px)`; // Reducerer marginen
