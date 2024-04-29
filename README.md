@@ -1,7 +1,7 @@
 Frontend Webapplikation: gruppe 8
 
 Projektoversigt
-Vi udvikler en lille frontend webapplikation, som skal køre lokalt og også implementeres i skyen. Den primære målsætning for applikationen er at tilbyde en brugervenlig grænseflade for at håndtere indkøbskurve funktionalitet samt ordreafgivelse.
+Vi udvikler en frontend webapplikation, som skal køre lokalt og også implementeres i skyen. Den primære målsætning for applikationen er at tilbyde en brugervenlig grænseflade for at håndtere indkøbskurve funktionalitet samt ordreafgivelse.
 
 Funktionaliteter: 
 
