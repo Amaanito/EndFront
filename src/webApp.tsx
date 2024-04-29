@@ -5,8 +5,8 @@ import { Helmet } from "react-helmet";
 
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
-  const columnWidth = `calc(100% / ${numProductsPerRow} - 15px)`; // Reducerer marginen
-  const marginRight = "8px"; // Ændret margin
+  const columnWidth = `calc(100% / ${numProductsPerRow} - 15px)`;
+  const marginRight = "8px";
   const productHeight = "475px";
 
   return (
@@ -14,7 +14,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "center", // Ændret justifyContent til "center"
+        justifyContent: "center",
         alignItems: "stretch",
       }}
     >
@@ -97,7 +97,7 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
     itemDiscount = item.price * item.quantity * (item.rebatePercent / 100);
   }
 
-  // Beregner den endelige total for varen efter rabat
+
 
   return (
     <div className="cart-item">
@@ -129,20 +129,20 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
 
         <ul style={{ marginTop: "15px" }}></ul>
         <button
-        
+
           className="remove-button"
           onClick={() => removeFromCart(item.id)}
         >
-       
-      
-       <ul style={{ marginLeft:"10px" }}></ul>
+
+
+          <ul style={{ marginLeft: "10px" }}></ul>
           Fjern
         </button>
-        
-        
-        
+
+
+
       </div>
-      
+
     </div>
   );
 }
@@ -152,7 +152,7 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
     0
   );
 
-  // Beregner den samlede rabat for varerne
+
   const totalItemDiscounts = cart.reduce((acc, item) => {
     const itemTotal = item.price * item.quantity;
     const itemDiscount =
@@ -162,11 +162,11 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
     return acc + itemDiscount;
   }, 0);
 
-  // Tjekker om subtotalen kvalificerer til en ordrebaseret rabat
+
   const orderDiscount =
     subtotal > 300 ? (subtotal - totalItemDiscounts) * 0.1 : 0;
 
-  // Beregner den totale pris med alle rabatter
+
 
   return (
     <div className="shopping-cart">
@@ -179,7 +179,7 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
               key={item.id}
               item={item}
               removeFromCart={removeFromCart}
-              updateQuantity={updateQuantity} 
+              updateQuantity={updateQuantity}
             />
           ))}
           <li className="cart-summary">
@@ -358,9 +358,9 @@ export function App2() {
           to={
             !isCartEmpty
               ? {
-                  pathname: "/checkout",
-                  state: { productsInCart: cart },
-                }
+                pathname: "/checkout",
+                state: { productsInCart: cart },
+              }
               : ""
           }
         >

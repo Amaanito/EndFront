@@ -18,7 +18,6 @@ export const calculateTotalPrice = (cart) => {
   let totalPrice = 0;
   cart.forEach(item => {
     let itemTotal = item.price * item.quantity;
-    // Anvender individuelle rabatter
     if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
       itemTotal -= itemTotal * (item.rebatePercent / 100);
     }

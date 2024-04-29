@@ -1,6 +1,6 @@
 import { render, fireEvent, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Checkout from '../Checkout'; // Erstat med din faktiske importsti
+import Checkout from '../Checkout';
 
 describe('Checkout', () => {
   it('skal indsende formularen korrekt', async () => {
@@ -11,7 +11,7 @@ describe('Checkout', () => {
       ]
     };
 
- 
+
     render(
       <MemoryRouter initialEntries={[{ pathname: '/checkout', state: initialState }]}>
         <Checkout />

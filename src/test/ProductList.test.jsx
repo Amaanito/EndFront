@@ -12,15 +12,12 @@ test('renders product list and handles add to cart', () => {
 
   render(<ProductList products={products} addToCart={addToCart} upsellNotification={upsellNotification} />);
 
-  // Check that products are rendered
   expect(screen.getByText('Product 1 - 100 DKK')).toBeInTheDocument();
   expect(screen.getByText('Product 2 - 200 DKK')).toBeInTheDocument();
 
-  // Find and click on "Add to Cart" button for the first product
-  // Antager her, at knapperne har en tekst der siger "Add to Cart" efterfulgt af produktnavnet
-// Simulate clicking on "Add to Cart" button for the first product
-fireEvent.click(screen.getByLabelText('add Product 1 to cart'));
 
-  // Check that addToCart was called with correct product id
+  fireEvent.click(screen.getByLabelText('add Product 1 to cart'));
+
+
   expect(addToCart).toHaveBeenCalledWith(1);
 });

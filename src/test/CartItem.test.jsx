@@ -8,12 +8,9 @@ test('renders cart item and handles remove from cart', () => {
 
   const { getByText } = render(<CartItem item={item} removeFromCart={removeFromCart} />);
 
-  // Check that cart item is rendered
   expect(getByText('Product 1 - 100 DKK - Quantity: 2')).toBeInTheDocument();
 
-  // Simulate clicking on "Remove" button
   fireEvent.click(getByText('Remove'));
 
-  // Check that removeFromCart was called with correct item id
   expect(removeFromCart).toHaveBeenCalledWith(1);
 });

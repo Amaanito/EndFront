@@ -51,7 +51,6 @@ const Checkout = () => {
     metaViewport.setAttribute("name", "viewport");
     metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
     document.head.appendChild(metaViewport);
-    // Returnér en clean-up funktion for at fjerne det tilføjede meta-tag
     return () => {
       document.head.removeChild(metaViewport);
     };
@@ -63,7 +62,6 @@ const Checkout = () => {
       [name]: value,
     }));
     if (name === "name") {
-      // Tillader kun bogstaver og nogle almindelige navneseparatorer som mellemrum, bindestreger og apostroffer
       const isValidName = /^[A-Za-z\s'-]+$/.test(value);
       e.target.setCustomValidity(
         isValidName ? "" : "Navnet må kun indeholde bogstaver."
@@ -74,7 +72,6 @@ const Checkout = () => {
     } else if (name === "phone") {
       e.target.setCustomValidity("");
     }
-    // Ingen opdatering af phoneError her
     if (name === "phone") {
       e.target.setCustomValidity("");
       if (value && (!/^\d*$/.test(value) || value.length > 8)) {
@@ -86,7 +83,7 @@ const Checkout = () => {
         );
       } else {
         setPhoneError("");
-        e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
+        e.target.setCustomValidity("");
       }
     } else if (name === "zipCode") {
       const postNummerObj = postnumre.find(
@@ -97,10 +94,8 @@ const Checkout = () => {
           ...prevState,
           city: postNummerObj.navn,
         }));
-        // Lås bynavnet
         document.getElementById("city").setAttribute("readonly", "readonly");
       } else {
-        // Tillad brugeren at skrive en by, hvis postnummeret ikke findes
         document.getElementById("city").removeAttribute("readonly");
       }
     }
@@ -108,13 +103,12 @@ const Checkout = () => {
   const handlePhoneInput = (e) => {
     const { value } = e.target;
     if (value && (!/^\d*$/.test(value) || value.length > 8)) {
-      // Fjernede setPhoneError opkaldet
       e.target.setCustomValidity(
         "Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
       );
       e.target.reportValidity();
     } else {
-      e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
+      e.target.setCustomValidity("");
     }
   };
   const handleSubmit = async (e) => {
@@ -196,7 +190,7 @@ const Checkout = () => {
       }
     });
     if (subtotal > 300) {
-      orderDiscount = (subtotal - discountOver300) * 0.1; // 10% order-based discount
+      orderDiscount = (subtotal - discountOver300) * 0.1;
     }
     const totalPrice = subtotal - discountOver300 - orderDiscount;
     return { subtotal, discountOver300, orderDiscount, totalPrice };
@@ -237,8 +231,8 @@ const Checkout = () => {
             placeholder="Telefon"
             required
             value={deliveryAddress.phone}
-            onChange={handleInputChange} // Håndterer ændring af state
-            onInput={handlePhoneInput} // Tjekker for valideringsfejl med det samme
+            onChange={handleInputChange}
+            onInput={handlePhoneInput}
             style={{ width: "305px", height: "20px", marginBottom: "10px" }}
             pattern="^\d{1,8}$"
             title="Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
@@ -289,7 +283,7 @@ const Checkout = () => {
           <input
             type="text"
             name="city"
-            id="city" // Tilføjet ID her
+            id="city"
             placeholder="By"
             required
             value={deliveryAddress.city}
@@ -321,16 +315,16 @@ const Checkout = () => {
           />
         </div>
         <div>
-        <input
-  type="text"
-  name="vatNumber"
-  placeholder="CVR-nummer"
-  value={deliveryAddress.vatNumber}
-  onChange={handleInputChange}
-  pattern="^\d{8}$|^$"  // Tillader enten præcis 8 cifre eller at være tomt
-  title="CVR-nummer skal være præcis 8 cifre langt, hvis det angives."
-  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-/>
+          <input
+            type="text"
+            name="vatNumber"
+            placeholder="CVR-nummer"
+            value={deliveryAddress.vatNumber}
+            onChange={handleInputChange}
+            pattern="^\d{8}$|^$"
+            title="CVR-nummer skal være præcis 8 cifre langt, hvis det angives."
+            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+          />
         </div>
         <div style={{ marginBottom: "10px" }}>
           <label htmlFor="orderComment"></label>
@@ -402,7 +396,7 @@ const Checkout = () => {
             ) : (
               <ul style={{ listStyleType: "none", marginRight: "285px", textAlign: "center" }}>
 
-              <li>Ingen produkter i kurven</li>
+                <li>Ingen produkter i kurven</li>
               </ul>
             )}
           </ul>
