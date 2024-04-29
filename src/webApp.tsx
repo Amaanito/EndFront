@@ -2,85 +2,45 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
 
+import "./webApp.css";
+
 export function ProductList({ products, addToCart, upsellNotification }) {
-  const numProductsPerRow = 4;
-  const columnWidth = `calc(100% / ${numProductsPerRow} - 15px)`; // Reducerer marginen
-  const marginRight = "8px"; // Ændret margin
-  const productHeight = "475px";
-
   return (
-    <div
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        justifyContent: "center", // Ændret justifyContent til "center"
-        alignItems: "stretch",
-      }}
-    >
-      {products.map((product, index) => (
-        <div
-          key={product.id}
-          style={{
-            width: columnWidth,
-            marginBottom: "100px",
-            marginRight:
-              index % numProductsPerRow === numProductsPerRow - 1
-                ? 0
-                : marginRight,
-          }}
-        >
-          <div style={{ height: productHeight }}>
-            <div
-              style={{
-                border: "3px solid #ccc",
-                padding: "20px",
-                textAlign: "center",
-                height: "100%",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-              }}
+    <div className="product-container">
+      {products.map((product) => (
+        <div key={product.id} className="product-item">
+          <div className="product-details">
+            <div className="product-name">{product.name}</div>
+
+            <img
+              src={product.imageUrl}
+              alt={product.name}
+              className="product-image"
+            />
+
+            <div className="product-price">{product.price} DKK</div>
+          </div>
+
+          <div>
+            <button
+              style={{ marginTop: "10px", backgroundColor: "orange" }}
+              onClick={() => addToCart(product.id)}
             >
-              <div>
-                <div style={{ fontWeight: "bold", marginBottom: "10px" }}>
-                  {product.name}
-                </div>
+              Tilføj til kurv
+            </button>
 
-                <img
-                  src={product.imageUrl}
-                  alt={product.name}
-                  style={{
-                    marginBottom: "10px",
-                    maxWidth: "100%",
-                    height: "300px",
-                  }}
-                />
-
-                <div style={{ marginBottom: "10px" }}>{product.price} DKK</div>
-              </div>
-
-              <div>
-                <button
-                  style={{ marginTop: "10px", backgroundColor: "orange" }}
-                  onClick={() => addToCart(product.id)}
-                >
-                  Tilføj til kurv
-                </button>
-
-                {product.upsellProductId && (
-                  <button
-                    style={{
-                      marginTop: "10px",
-                      backgroundColor: "black",
-                      color: "white",
-                    }}
-                    onClick={() => upsellNotification(product.upsellProductId)}
-                  >
-                    Se alternativ
-                  </button>
-                )}
-              </div>
-            </div>
+            {product.upsellProductId && (
+              <button
+                style={{
+                  marginTop: "10px",
+                  backgroundColor: "black",
+                  color: "white",
+                }}
+                onClick={() => upsellNotification(product.upsellProductId)}
+              >
+                Se alternativ
+              </button>
+            )}
           </div>
         </div>
       ))}
@@ -92,14 +52,11 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 }
 
 export function CartItem({ item, removeFromCart, updateQuantity }) {
-  // Beregner totalen for hver vare baseret på pris og antal
-  // Beregner varebaseret rabat hvis betingelserne er opfyldt
   let itemDiscount = 0;
   if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
     itemDiscount = item.price * item.quantity * (item.rebatePercent / 100);
   }
 
-  // Beregner den endelige total for varen efter rabat
 
   return (
     <div className="cart-item">
@@ -129,34 +86,25 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
           </p>
         )}
 
- <ul style={{ marginTop:"15px" }}></ul>
+        <ul style={{ marginTop: "15px" }}></ul>
         <button
-        
           className="remove-button"
           onClick={() => removeFromCart(item.id)}
         >
-       
-      
-       <ul style={{ marginLeft:"10px" }}></ul>
+          <ul style={{ marginLeft: "10px" }}></ul>
           Fjern
         </button>
-        
-        
-        
       </div>
-      
     </div>
   );
 }
 
 export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
-  // Beregner subtotalen for indkøbskurven uden ordrebaseret rabat
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
 
-  // Beregner den samlede rabat for varerne
   const totalItemDiscounts = cart.reduce((acc, item) => {
     const itemTotal = item.price * item.quantity;
     const itemDiscount =
@@ -166,14 +114,12 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
     return acc + itemDiscount;
   }, 0);
 
-  // Tjekker om subtotalen kvalificerer til en ordrebaseret rabat
   const orderDiscount =
     subtotal > 300 ? (subtotal - totalItemDiscounts) * 0.1 : 0;
 
-  // Beregner den totale pris med alle rabatter
 
   return (
-    <div>
+    <div className="shopping-cart">
       {cart.length === 0 ? (
         <h3>Din Indskøbsvogn er tom</h3>
       ) : (
@@ -183,7 +129,7 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
               key={item.id}
               item={item}
               removeFromCart={removeFromCart}
-              updateQuantity={updateQuantity} // Sørg for at give en reel funktion her
+              updateQuantity={updateQuantity} 
             />
           ))}
           <li className="cart-summary">
@@ -239,7 +185,7 @@ export function App2() {
     metaViewport.setAttribute("name", "viewport");
     metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
     document.head.appendChild(metaViewport);
-  
+
     return () => {
       document.head.removeChild(metaViewport);
     };
@@ -410,4 +356,3 @@ export function App2() {
     </div>
   );
 }
-export default App2;
