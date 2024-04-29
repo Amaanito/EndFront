@@ -1,15 +1,17 @@
 import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { Helmet } from "react-helmet";
+import { useLocation } from 'react-router-dom';
+
+
 
 const Checkout = () => {
   const location = useLocation();
-  const { productsInCart } = location.state || {};
+  const { productsInCart } = location.state;
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [marketingAccepted, setMarketingAccepted] = useState(false);
   const [deliveryAddress, setDeliveryAddress] = useState({
+
     name: "",
     email: "",
     phone: "",
@@ -28,40 +30,19 @@ const Checkout = () => {
   const history = useHistory();
 
   useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      try {
-        const response = await fetch(
-          "https://api.dataforsyningen.dk/postnumre"
-        );
-        if (!response.ok) {
-          throw new Error("Network response was not ok.");
-        }
-        const data = await response.json();
+    setIsLoading(true);
+    fetch("https://api.dataforsyningen.dk/postnumre")
+      .then(response => response.json())
+      .then(data => {
         setPostnumre(data);
         setIsLoading(false);
-      } catch (error) {
+      })
+      .catch(error => {
         console.error("Error fetching post codes:", error);
         setError("Kunne ikke hente postnumre");
         setIsLoading(false);
-      }
-    };
-
-    fetchData();
+      });
   }, []);
-
-  useEffect(() => {
-    const metaViewport = document.createElement("meta");
-    metaViewport.setAttribute("name", "viewport");
-    metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
-    document.head.appendChild(metaViewport);
-
-    // Returnér en clean-up funktion for at fjerne det tilføjede meta-tag
-    return () => {
-      document.head.removeChild(metaViewport);
-    };
-  }, []);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setDeliveryAddress((prevState) => ({
@@ -71,9 +52,7 @@ const Checkout = () => {
     if (name === "name") {
       // Tillader kun bogstaver og nogle almindelige navneseparatorer som mellemrum, bindestreger og apostroffer
       const isValidName = /^[A-Za-z\s'-]+$/.test(value);
-      e.target.setCustomValidity(
-        isValidName ? "" : "Navnet må kun indeholde bogstaver."
-      );
+      e.target.setCustomValidity(isValidName ? "" : "Navnet må kun indeholde bogstaver.");
       if (!isValidName) {
         e.target.reportValidity();
       }
@@ -81,36 +60,35 @@ const Checkout = () => {
       e.target.setCustomValidity("");
     }
 
+
     // Ingen opdatering af phoneError her
     if (name === "phone") {
       e.target.setCustomValidity("");
 
       if (value && (!/^\d*$/.test(value) || value.length > 8)) {
-        setPhoneError(
-          "Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
-        );
-        e.target.setCustomValidity(
-          "Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
-        );
+        setPhoneError("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
+        e.target.setCustomValidity("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
       } else {
         setPhoneError("");
         e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
+
       }
     } else if (name === "zipCode") {
-      const postNummerObj = postnumre.find(
-        (postnummer) => postnummer.nr === value
-      );
+      const postNummerObj = postnumre.find(postnummer => postnummer.nr === value);
       if (postNummerObj) {
-        setDeliveryAddress((prevState) => ({
+        setDeliveryAddress(prevState => ({
           ...prevState,
           city: postNummerObj.navn,
         }));
         // Lås bynavnet
-        document.getElementById("city").setAttribute("readonly", "readonly");
+        document.getElementById('city').setAttribute('readonly', 'readonly');
       } else {
         // Tillad brugeren at skrive en by, hvis postnummeret ikke findes
-        document.getElementById("city").removeAttribute("readonly");
+        document.getElementById('city').removeAttribute('readonly');
       }
+
+    } else {
+
     }
   };
 
@@ -118,14 +96,13 @@ const Checkout = () => {
     const { value } = e.target;
     if (value && (!/^\d*$/.test(value) || value.length > 8)) {
       // Fjernede setPhoneError opkaldet
-      e.target.setCustomValidity(
-        "Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
-      );
+      e.target.setCustomValidity("Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt.");
       e.target.reportValidity();
     } else {
       e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
     }
   };
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -145,8 +122,11 @@ const Checkout = () => {
     ) {
       alert("Accepter vilkår og betingelser for at fortsætte.");
       return;
+
+      
     }
     setIsLoading(true);
+
 
     const formData = {
       name: deliveryAddress.name,
@@ -163,7 +143,7 @@ const Checkout = () => {
       termsAccepted,
       marketingAccepted,
       productsInCart,
-      totalPriceInfo,
+      totalPriceInfo
     };
     try {
       const response = await fetch(
@@ -179,6 +159,7 @@ const Checkout = () => {
       if (response.ok) {
         setIsLoading(false);
         history.push("/confirm");
+        
       } else {
         setIsLoading(false);
         window.alert("Order submission failed!");
@@ -189,15 +170,6 @@ const Checkout = () => {
     }
   };
   const calculateTotalPrice = (cart) => {
-    if (!cart || cart.length === 0) {
-      return {
-        subtotal: 0,
-        discountOver300: 0,
-        orderDiscount: 0,
-        totalPrice: 0,
-      };
-    }
-
     let subtotal = 0;
     let discountOver300 = 0;
     let orderDiscount = 0;
@@ -206,13 +178,12 @@ const Checkout = () => {
       subtotal += item.price * item.quantity;
 
       if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
-        discountOver300 +=
-          item.quantity * (item.price * (item.rebatePercent / 100));
+        discountOver300 += item.quantity * (item.price * (item.rebatePercent / 100));
       }
     });
 
     if (subtotal > 300) {
-      orderDiscount = (subtotal - discountOver300) * 0.1; // 10% order-based discount
+      orderDiscount = subtotal * 0.1; // 10% order-based discount
     }
 
     const totalPrice = subtotal - discountOver300 - orderDiscount;
@@ -222,11 +193,19 @@ const Checkout = () => {
 
   const totalPriceInfo = calculateTotalPrice(productsInCart);
 
+
+
   return (
+
+
+
     <div style={{ width: "100%" }}>
       <h1>Leverings- og faktureringsadresse</h1>
       <form onSubmit={handleSubmit}>
+
+
         <div>
+          
           <input
             type="text"
             name="name"
@@ -238,6 +217,7 @@ const Checkout = () => {
             pattern="^[A-Za-z\s'-]+$"
             title="Navnet må kun indeholde bogstaver."
           />
+
         </div>
         <div>
           <input
@@ -263,6 +243,7 @@ const Checkout = () => {
             pattern="^\d{1,8}$"
             title="Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
           />
+
         </div>
         <div>
           <input
@@ -275,6 +256,7 @@ const Checkout = () => {
             style={{ width: "305px", height: "20px", marginBottom: "10px" }}
             title="Du skal udfylde adressefeltet."
           />
+
         </div>
         <div>
           <input
@@ -295,15 +277,13 @@ const Checkout = () => {
             style={{ width: "315px", height: "25px", marginBottom: "10px" }}
           >
             <option value="">Vælg postnummer</option>
-            {postnumre &&
-              Array.isArray(postnumre) &&
-              postnumre.map((postnummer) => (
-                <option key={postnummer.nr} value={postnummer.nr}>
-                  {postnummer.nr} {postnummer.navn}
-                </option>
-              ))}
+            {postnumre.map((postnummer) => (
+              <option key={postnummer.nr} value={postnummer.nr}>
+                {postnummer.nr} {postnummer.navn}
+              </option>
+            ))}
           </select>
-
+   
           {error && <p>{error}</p>}
         </div>
 
@@ -319,6 +299,7 @@ const Checkout = () => {
             style={{ width: "305px", height: "20px", marginBottom: "10px" }}
             readOnly={deliveryAddress.city !== ""}
           />
+
         </div>
         <div>
           <input
@@ -343,17 +324,14 @@ const Checkout = () => {
           />
         </div>
         <div>
-        <input
-  type="text"
-  name="vatNumber"
-  placeholder="CVR-nummer"
-  value={deliveryAddress.vatNumber}
-  onChange={handleInputChange}
-  pattern="^\d{8}$|^$"  // Tillader enten præcis 8 cifre eller at være tomt
-  title="CVR-nummer skal være præcis 8 cifre langt, hvis det angives."
-  style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-/>
-
+          <input
+            type="text"
+            name="vatNumber"
+            placeholder="CVR-nummer"
+            value={deliveryAddress.vatNumber}
+            onChange={handleInputChange}
+            style={{ width: "305px", height: "20px", marginBottom: "10px" }}
+          />
         </div>
         <div style={{ marginBottom: "10px" }}>
           <label htmlFor="orderComment"></label>
@@ -367,83 +345,51 @@ const Checkout = () => {
               padding: "10px",
               boxSizing: "border-box",
             }}
+
+
           ></textarea>
         </div>
 
         <div>
-          <h1>Kurv</h1>
+        <h1>Kurv</h1>
+        <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
+          {productsInCart.map((product) => (
+            <li key={product.id} style={{ display: "flex", maxWidth: "320px", marginBottom: "20px", outline: "1px solid #ccc", padding: "10px" }}>
+              <div style={{ marginRight: "20px" }}>
+                <img src={product.imageUrl} alt={product.name} style={{ maxWidth: "100px", height: "auto" }} />
+              </div>
+              <div>
+                <p style={{ margin: 0, marginBottom: "5px", fontWeight: "bold" }}>{product.name}</p>
+                <p style={{ margin: 0, marginBottom: "5px" }}>Pris: {product.price.toFixed(2)} DKK</p>
+                <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
+                {product.quantity >= product.rebateQuantity && product.rebateQuantity > 0 && (
+                  <p className="cart-item-discount">
+                    Rabat: -{(product.quantity * (product.price * (product.rebatePercent / 100))).toFixed(2)} kr.
+                  </p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <h3>
+          Subtotal: {totalPriceInfo.subtotal.toFixed(2)} DKK
+        </h3>
+        {totalPriceInfo.discountOver300 > 0 && (
+          <p className="total-discount" style={{ color: "orange" }}>
+            Total varebaseret rabat: -{totalPriceInfo.discountOver300.toFixed(2)} DKK
+          </p>
+        )}
+        {totalPriceInfo.orderDiscount > 0 && (
+          <p className="order-discount" style={{ color: "orange" }}>
+            Ordrebaseret rabat (over 300 DKK): -{totalPriceInfo.orderDiscount.toFixed(2)} DKK
+          </p>
+        )}
+        <h3>
+          Total: {totalPriceInfo.totalPrice.toFixed(2)} DKK
+        </h3>
+      </div>
 
-          <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
-            
-            {productsInCart && productsInCart.length > 0 ? (
-              productsInCart.map((product) => (
-                <li
-                  key={product.id}
-                  style={{
-                    display: "flex",
-                    maxWidth: "320px",
-                    marginBottom: "20px",
-                    outline: "1px solid #ccc",
-                    padding: "10px",
-                  }}
-                >
-                  <div style={{ marginRight: "20px" }}>
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      style={{ maxWidth: "100px", height: "auto" }}
-                    />
-                  </div>
-                  <div>
-                    <p
-                      style={{
-                        margin: 0,
-                        marginBottom: "5px",
-                        fontWeight: "bold",
-                      }}
-                    >
-                      {product.name}
-                    </p>
-                    <p style={{ margin: 0, marginBottom: "5px" }}>
-                      Pris: {product.price.toFixed(2)} DKK
-                    </p>
-                    <p style={{ margin: 0 }}>Antal: {product.quantity}</p>
-                    {product.quantity >= product.rebateQuantity &&
-                      product.rebateQuantity > 0 && (
-                        <p className="cart-item-discount">
-                          Rabat: -
-                          {(
-                            product.quantity *
-                            (product.price * (product.rebatePercent / 100))
-                          ).toFixed(2)}{" "}
-                          kr.
-                        </p>
-                      )}
-                  </div>
-                </li>
-              ))
-            ) : (
-              <ul style={{ listStyleType: "none", marginRight: "285px", textAlign: "center" }}>
-              
-              <li>Ingen produkter i kurven</li>
-              </ul>
-            )}
-          </ul>
-          <h3>Subtotal: {totalPriceInfo.subtotal.toFixed(2)} DKK</h3>
-          {totalPriceInfo.discountOver300 > 0 && (
-            <p className="total-discount" style={{ color: "orange" }}>
-              Total varebaseret rabat: -
-              {totalPriceInfo.discountOver300.toFixed(2)} DKK
-            </p>
-          )}
-          {totalPriceInfo.orderDiscount > 0 && (
-            <p className="order-discount" style={{ color: "orange" }}>
-              Ordrebaseret rabat (over 300 DKK): -
-              {totalPriceInfo.orderDiscount.toFixed(2)} DKK
-            </p>
-          )}
-          <h3>Total: {totalPriceInfo.totalPrice.toFixed(2)} DKK</h3>
-        </div>
+
 
         <div
           style={{
@@ -476,10 +422,13 @@ const Checkout = () => {
               }}
               disabled={isLoading}
             >
-              {isLoading ? "Indlæser..." : "Bekræft"}
+                {isLoading ? "Indlæser..." : "Bekræft"}
+         
             </button>
           </div>
         </div>
+
+
 
         <div>
           <input
@@ -502,10 +451,9 @@ const Checkout = () => {
             Jeg accepterer at modtage marketingsmails
           </label>
         </div>
+
+
       </form>
-      <Helmet>
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-      </Helmet>
     </div>
   );
 };
