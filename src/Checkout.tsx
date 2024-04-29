@@ -334,13 +334,13 @@ const Checkout = () => {
   type="text"
   name="vatNumber"
   placeholder="CVR-nummer"
-  required
   value={deliveryAddress.vatNumber}
   onChange={handleInputChange}
-  pattern="^\d{8}$"  
-  title="CVR-nummer skal være præcis 8 cifre langt."
+  pattern="^\d{8}$|^$"  // Tillader enten præcis 8 cifre eller at være tomt
+  title="CVR-nummer skal være præcis 8 cifre langt, hvis det angives."
   style={{ width: "305px", height: "20px", marginBottom: "10px" }}
 />
+
         </div>
         <div style={{ marginBottom: "10px" }}>
           <label htmlFor="orderComment"></label>
