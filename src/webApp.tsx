@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
+const metaViewport = document.createElement("meta");
+metaViewport.setAttribute("name", "viewport");
+metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
+document.head.appendChild(metaViewport);
+
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
   const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;

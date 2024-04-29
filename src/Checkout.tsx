@@ -3,6 +3,11 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 
+const metaViewport = document.createElement("meta");
+metaViewport.setAttribute("name", "viewport");
+metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
+document.head.appendChild(metaViewport);
+
 const Checkout = () => {
   const location = useLocation();
   const { productsInCart } = location.state || {};

@@ -1,3 +1,9 @@
+
+const metaViewport = document.createElement("meta");
+metaViewport.setAttribute("name", "viewport");
+metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
+document.head.appendChild(metaViewport);
+
 const Confirm = () => {
   return (
     <div>
