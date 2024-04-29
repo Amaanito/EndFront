@@ -1,13 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
   const columnWidth = `calc(100% / ${numProductsPerRow} - 15px)`; // Reducerer marginen
   const marginRight = "8px"; // Ændret margin
   const productHeight = "475px";
-
   return (
     <div
       style={{
@@ -45,7 +43,6 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                 <div style={{ fontWeight: "bold", marginBottom: "10px" }}>
                   {product.name}
                 </div>
-
                 <img
                   src={product.imageUrl}
                   alt={product.name}
@@ -55,10 +52,8 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                     height: "300px",
                   }}
                 />
-
                 <div style={{ marginBottom: "10px" }}>{product.price} DKK</div>
               </div>
-
               <div>
                 <button
                   style={{ marginTop: "10px", backgroundColor: "orange" }}
@@ -66,7 +61,6 @@ export function ProductList({ products, addToCart, upsellNotification }) {
                 >
                   Tilføj til kurv
                 </button>
-
                 {product.upsellProductId && (
                   <button
                     style={{
@@ -90,7 +84,6 @@ export function ProductList({ products, addToCart, upsellNotification }) {
     </div>
   );
 }
-
 export function CartItem({ item, removeFromCart, updateQuantity }) {
   // Beregner totalen for hver vare baseret på pris og antal
   // Beregner varebaseret rabat hvis betingelserne er opfyldt
@@ -98,9 +91,7 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
   if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
     itemDiscount = item.price * item.quantity * (item.rebatePercent / 100);
   }
-
   // Beregner den endelige total for varen efter rabat
-
   return (
     <div className="cart-item">
       <img src={item.imageUrl} alt={item.name} className="cart-item-image" />
@@ -129,24 +120,31 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
           </p>
         )}
 
+ <ul style={{ marginTop:"15px" }}></ul>
         <button
+
           className="remove-button"
           onClick={() => removeFromCart(item.id)}
         >
+
+
+       <ul style={{ marginLeft:"10px" }}></ul>
           Fjern
         </button>
+
+
+
       </div>
+
     </div>
   );
 }
-
 export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
   // Beregner subtotalen for indkøbskurven uden ordrebaseret rabat
   const subtotal = cart.reduce(
     (acc, item) => acc + item.price * item.quantity,
     0
   );
-
   // Beregner den samlede rabat for varerne
   const totalItemDiscounts = cart.reduce((acc, item) => {
     const itemTotal = item.price * item.quantity;
@@ -156,13 +154,10 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
         : 0;
     return acc + itemDiscount;
   }, 0);
-
   // Tjekker om subtotalen kvalificerer til en ordrebaseret rabat
   const orderDiscount =
     subtotal > 300 ? (subtotal - totalItemDiscounts) * 0.1 : 0;
-
   // Beregner den totale pris med alle rabatter
-
   return (
     <div>
       {cart.length === 0 ? (
@@ -193,14 +188,12 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
     </div>
   );
 }
-
 export function App2() {
   const [products, setProducts] = React.useState([]);
   const [cart, setCart] = React.useState([]);
   const [totalPrice, setTotalPrice] = React.useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isCartEmpty, setIsCartEmpty] = useState(true);
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -217,14 +210,11 @@ export function App2() {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, []);
-
   useEffect(() => {
     setIsCartEmpty(cart.length === 0);
   }, [cart]);
-
   useEffect(() => {
     const metaViewport = document.createElement("meta");
     metaViewport.setAttribute("name", "viewport");
@@ -235,12 +225,10 @@ export function App2() {
       document.head.removeChild(metaViewport);
     };
   }, []);
-
   const addToCart = (productId) => {
     const productToAdd = products.find((product) => product.id === productId);
     const existingCartItem = cart.find((item) => item.id === productId);
     let newCart;
-
     if (existingCartItem) {
       newCart = cart.map((item) =>
         item.id === productId ? { ...item, quantity: item.quantity + 1 } : item
@@ -248,11 +236,9 @@ export function App2() {
     } else {
       newCart = [...cart, { ...productToAdd, quantity: 1 }];
     }
-
     setCart(newCart);
     setTotalPrice(calculateTotalPrice(newCart));
   };
-
   const removeFromCart = (productId) => {
     const newCart = cart.reduce((acc, item) => {
       if (item.id === productId) {
@@ -264,11 +250,9 @@ export function App2() {
       }
       return acc;
     }, []);
-
     setCart(newCart);
     setTotalPrice(calculateTotalPrice(newCart));
   };
-
   const updateQuantity = (productId, quantity) => {
     setCart((prevCart) => {
       const updatedCart = prevCart.map((item) =>
@@ -288,14 +272,11 @@ export function App2() {
       }
       totalPrice += itemTotal;
     });
-
     if (totalPrice > 300) {
       totalPrice *= 0.9;
     }
-
     return totalPrice;
   };
-
   const upsellNotification = (upsellProductId) => {
     const upsellProduct = products.find(
       (product) => product.id === upsellProductId
@@ -304,13 +285,11 @@ export function App2() {
       `Overvej også ${upsellProduct.name} til ${upsellProduct.price} DKK for en bedre værdi!`
     );
   };
-
   const scrollToShoppingCart = () => {
     document
       .getElementById("shopping-cart")
       .scrollIntoView({ behavior: "smooth", block: "start" });
   };
-
   return (
     <div style={{ margin: -40 }}>
       {isLoading && <div data-testid="loading-indicator">Indlæser...</div>}
@@ -335,14 +314,12 @@ export function App2() {
           onClick={scrollToShoppingCart}
         />
       </h1>
-
       <h1>Produkter</h1>
       <ProductList
         products={products}
         addToCart={addToCart}
         upsellNotification={upsellNotification}
       />
-
       <img
         src="kurv.png"
         style={{
@@ -352,16 +329,13 @@ export function App2() {
           background: "none",
         }}
       />
-
       <h1 id="shopping-cart">Indkøbsvogn</h1>
-
       <ShoppingCart
         cart={cart}
         removeFromCart={removeFromCart}
         updateQuantity={updateQuantity}
       />
       <h3>Total pris: {totalPrice.toFixed(2)} DKK</h3>
-
       <div
         style={{
           textAlign: "right",

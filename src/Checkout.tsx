@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { Helmet } from "react-helmet";
-
 const Checkout = () => {
   const location = useLocation();
   const { productsInCart } = location.state || {};
@@ -26,7 +25,6 @@ const Checkout = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const history = useHistory();
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoading(true);
@@ -46,22 +44,18 @@ const Checkout = () => {
         setIsLoading(false);
       }
     };
-
     fetchData();
   }, []);
-
   useEffect(() => {
     const metaViewport = document.createElement("meta");
     metaViewport.setAttribute("name", "viewport");
     metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
     document.head.appendChild(metaViewport);
-
     // Returnér en clean-up funktion for at fjerne det tilføjede meta-tag
     return () => {
       document.head.removeChild(metaViewport);
     };
   }, []);
-
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setDeliveryAddress((prevState) => ({
@@ -80,11 +74,9 @@ const Checkout = () => {
     } else if (name === "phone") {
       e.target.setCustomValidity("");
     }
-
     // Ingen opdatering af phoneError her
     if (name === "phone") {
       e.target.setCustomValidity("");
-
       if (value && (!/^\d*$/.test(value) || value.length > 8)) {
         setPhoneError(
           "Kontaktnummer er ugyldigt. Det skal være et tal og maksimalt 8 cifre langt."
@@ -113,7 +105,6 @@ const Checkout = () => {
       }
     }
   };
-
   const handlePhoneInput = (e) => {
     const { value } = e.target;
     if (value && (!/^\d*$/.test(value) || value.length > 8)) {
@@ -126,14 +117,12 @@ const Checkout = () => {
       e.target.setCustomValidity(""); // Rydder eventuelle valideringsfejl
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (phoneError) {
       alert(phoneError);
       return;
     }
-
     if (
       deliveryAddress.name.trim() === "" ||
       deliveryAddress.email.trim() === "" ||
@@ -147,7 +136,6 @@ const Checkout = () => {
       return;
     }
     setIsLoading(true);
-
     const formData = {
       name: deliveryAddress.name,
       email: deliveryAddress.email,
@@ -197,31 +185,23 @@ const Checkout = () => {
         totalPrice: 0,
       };
     }
-
     let subtotal = 0;
     let discountOver300 = 0;
     let orderDiscount = 0;
-
     cart.forEach((item) => {
       subtotal += item.price * item.quantity;
-
       if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
         discountOver300 +=
           item.quantity * (item.price * (item.rebatePercent / 100));
       }
     });
-
     if (subtotal > 300) {
       orderDiscount = (subtotal - discountOver300) * 0.1; // 10% order-based discount
     }
-
     const totalPrice = subtotal - discountOver300 - orderDiscount;
-
     return { subtotal, discountOver300, orderDiscount, totalPrice };
   };
-
   const totalPriceInfo = calculateTotalPrice(productsInCart);
-
   return (
     <div style={{ width: "100%" }}>
       <h1>Leverings- og faktureringsadresse</h1>
@@ -303,10 +283,8 @@ const Checkout = () => {
                 </option>
               ))}
           </select>
-
           {error && <p>{error}</p>}
         </div>
-
         <div>
           <input
             type="text"
@@ -353,7 +331,6 @@ const Checkout = () => {
   title="CVR-nummer skal være præcis 8 cifre langt, hvis det angives."
   style={{ width: "305px", height: "20px", marginBottom: "10px" }}
 />
-
         </div>
         <div style={{ marginBottom: "10px" }}>
           <label htmlFor="orderComment"></label>
@@ -374,7 +351,7 @@ const Checkout = () => {
           <h1>Kurv</h1>
 
           <ul style={{ listStyleType: "none", marginLeft: "210px" }}>
-            
+
             {productsInCart && productsInCart.length > 0 ? (
               productsInCart.map((product) => (
                 <li
@@ -424,7 +401,7 @@ const Checkout = () => {
               ))
             ) : (
               <ul style={{ listStyleType: "none", marginRight: "285px", textAlign: "center" }}>
-              
+
               <li>Ingen produkter i kurven</li>
               </ul>
             )}
@@ -444,7 +421,6 @@ const Checkout = () => {
           )}
           <h3>Total: {totalPriceInfo.totalPrice.toFixed(2)} DKK</h3>
         </div>
-
         <div
           style={{
             display: "flex",
@@ -480,7 +456,6 @@ const Checkout = () => {
             </button>
           </div>
         </div>
-
         <div>
           <input
             type="checkbox"
@@ -490,7 +465,6 @@ const Checkout = () => {
           />
           <label htmlFor="terms">Jeg accepterer vilkår og betingelser</label>
         </div>
-
         <div>
           <input
             type="checkbox"
@@ -509,5 +483,4 @@ const Checkout = () => {
     </div>
   );
 };
-
 export default Checkout;
