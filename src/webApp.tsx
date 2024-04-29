@@ -241,9 +241,12 @@ export function App2() {
 
   const updateQuantity = (productId, quantity) => {
     setCart(prevCart => {
-      return prevCart.map(item =>
+      const updatedCart = prevCart.map(item =>
         item.id === productId ? { ...item, quantity } : item
       );
+      const totalPrice = calculateTotalPrice(updatedCart);
+      setTotalPrice(totalPrice);
+      return updatedCart;
     });
   };
   const calculateTotalPrice = (cart) => {
