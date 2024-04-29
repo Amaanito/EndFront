@@ -142,7 +142,8 @@ const Checkout = () => {
       orderComment: e.target.orderComment.value,
       termsAccepted,
       marketingAccepted,
-      productsInCart
+      productsInCart,
+      totalPriceInfo
     };
     try {
       const response = await fetch(
@@ -170,14 +171,14 @@ const Checkout = () => {
   };
   const calculateTotalPrice = (cart) => {
     let subtotal = 0;
-    let totalDiscount = 0;
+    let discountOver300 = 0;
     let orderDiscount = 0;
 
     cart.forEach((item) => {
       subtotal += item.price * item.quantity;
 
       if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
-        totalDiscount += item.quantity * (item.price * (item.rebatePercent / 100));
+        discountOver300 += item.quantity * (item.price * (item.rebatePercent / 100));
       }
     });
 
@@ -185,9 +186,9 @@ const Checkout = () => {
       orderDiscount = subtotal * 0.1; // 10% order-based discount
     }
 
-    const totalPrice = subtotal - totalDiscount - orderDiscount;
+    const totalPrice = subtotal - discountOver300 - orderDiscount;
 
-    return { subtotal, totalDiscount, orderDiscount, totalPrice };
+    return { subtotal, discountOver300, orderDiscount, totalPrice };
   };
 
   const totalPriceInfo = calculateTotalPrice(productsInCart);
@@ -373,9 +374,9 @@ const Checkout = () => {
         <h3>
           Subtotal: {totalPriceInfo.subtotal.toFixed(2)} DKK
         </h3>
-        {totalPriceInfo.totalDiscount > 0 && (
+        {totalPriceInfo.discountOver300 > 0 && (
           <p className="total-discount" style={{ color: "orange" }}>
-            Total varebaseret rabat: -{totalPriceInfo.totalDiscount.toFixed(2)} DKK
+            Total varebaseret rabat: -{totalPriceInfo.discountOver300.toFixed(2)} DKK
           </p>
         )}
         {totalPriceInfo.orderDiscount > 0 && (
