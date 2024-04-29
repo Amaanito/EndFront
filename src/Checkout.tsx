@@ -86,10 +86,7 @@ const Checkout = () => {
         // Tillad brugeren at skrive en by, hvis postnummeret ikke findes
         document.getElementById('city').removeAttribute('readonly');
       }
-
-    } else {
-
-    }
+    } 
   };
 
   const handlePhoneInput = (e) => {
