@@ -129,13 +129,22 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
           </p>
         )}
 
+ <ul style={{ marginTop:"15px" }}></ul>
         <button
+        
           className="remove-button"
           onClick={() => removeFromCart(item.id)}
         >
+       
+      
+       <ul style={{ marginLeft:"10px" }}></ul>
           Fjern
         </button>
+        
+        
+        
       </div>
+      
     </div>
   );
 }
