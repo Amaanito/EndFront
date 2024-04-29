@@ -2,11 +2,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import { useLocation } from "react-router-dom";
-
-const metaViewport = document.createElement("meta");
-metaViewport.setAttribute("name", "viewport");
-metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
-document.head.appendChild(metaViewport);
+import { Helmet } from "react-helmet";
 
 const Checkout = () => {
   const location = useLocation();
@@ -52,6 +48,18 @@ const Checkout = () => {
     };
 
     fetchData();
+  }, []);
+
+  useEffect(() => {
+    const metaViewport = document.createElement("meta");
+    metaViewport.setAttribute("name", "viewport");
+    metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
+    document.head.appendChild(metaViewport);
+
+    // Returnér en clean-up funktion for at fjerne det tilføjede meta-tag
+    return () => {
+      document.head.removeChild(metaViewport);
+    };
   }, []);
 
   const handleInputChange = (e) => {
@@ -490,6 +498,9 @@ const Checkout = () => {
           </label>
         </div>
       </form>
+      <Helmet>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Helmet>
     </div>
   );
 };

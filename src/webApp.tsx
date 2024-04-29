@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-
-const metaViewport = document.createElement("meta");
-metaViewport.setAttribute("name", "viewport");
-metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
-document.head.appendChild(metaViewport);
+import { Helmet } from "react-helmet";
 
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
@@ -88,6 +84,9 @@ export function ProductList({ products, addToCart, upsellNotification }) {
           </div>
         </div>
       ))}
+      <Helmet>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+      </Helmet>
     </div>
   );
 }
@@ -225,6 +224,17 @@ export function App2() {
   useEffect(() => {
     setIsCartEmpty(cart.length === 0);
   }, [cart]);
+
+  useEffect(() => {
+    const metaViewport = document.createElement("meta");
+    metaViewport.setAttribute("name", "viewport");
+    metaViewport.setAttribute("content", "width=device-width, initial-scale=1");
+    document.head.appendChild(metaViewport);
+  
+    return () => {
+      document.head.removeChild(metaViewport);
+    };
+  }, []);
 
   const addToCart = (productId) => {
     const productToAdd = products.find((product) => product.id === productId);
