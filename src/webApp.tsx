@@ -88,7 +88,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 }
 
 export function CartItem({ item, removeFromCart, updateQuantity }) {
-  // Beregner totalen for hver vare baseret på pris og antal  
+  // Beregner totalen for hver vare baseret på pris og antal
   // Beregner varebaseret rabat hvis betingelserne er opfyldt
   let itemDiscount = 0;
   if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
@@ -105,22 +105,28 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
         <p className="cart-item-price">Pris: {item.price.toFixed(2)} kr.</p>
         <div className="cart-item-quantity">
           Antal:
-          <select 
-            className="quantity-select" 
-            value={item.quantity} 
-            onChange={(e) => updateQuantity(item.id, parseInt(e.target.value, 10))}
+          <select
+            className="quantity-select"
+            value={item.quantity}
+            onChange={(e) =>
+              updateQuantity(item.id, parseInt(e.target.value, 10))
+            }
           >
-            {[...Array(10).keys()].map(i => (
-              <option key={i + 1} value={i + 1}>{i + 1}</option>
+            {[...Array(10).keys()].map((i) => (
+              <option key={i + 1} value={i + 1}>
+                {i + 1}
+              </option>
             ))}
           </select>
         </div>
         {itemDiscount > 0 && (
-          <p className="cart-item-discount">Rabat: -{itemDiscount.toFixed(2)} kr.</p>
+          <p className="cart-item-discount">
+            Rabat: -{itemDiscount.toFixed(2)} kr.
+          </p>
         )}
-        
-        <button 
-          className="remove-button" 
+
+        <button
+          className="remove-button"
           onClick={() => removeFromCart(item.id)}
         >
           Fjern
@@ -130,22 +136,26 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
   );
 }
 
-
 export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
   // Beregner subtotalen for indkøbskurven uden ordrebaseret rabat
-  const subtotal = cart.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+  const subtotal = cart.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   // Beregner den samlede rabat for varerne
   const totalItemDiscounts = cart.reduce((acc, item) => {
     const itemTotal = item.price * item.quantity;
-    const itemDiscount = item.quantity >= item.rebateQuantity && item.rebateQuantity > 0
-      ? itemTotal * (item.rebatePercent / 100)
-      : 0;
+    const itemDiscount =
+      item.quantity >= item.rebateQuantity && item.rebateQuantity > 0
+        ? itemTotal * (item.rebatePercent / 100)
+        : 0;
     return acc + itemDiscount;
   }, 0);
 
   // Tjekker om subtotalen kvalificerer til en ordrebaseret rabat
-  const orderDiscount = subtotal > 300 ? (subtotal - totalItemDiscounts) * 0.1 : 0;
+  const orderDiscount =
+    subtotal > 300 ? (subtotal - totalItemDiscounts) * 0.1 : 0;
 
   // Beregner den totale pris med alle rabatter
 
@@ -165,21 +175,20 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
           ))}
           <li className="cart-summary">
             {totalItemDiscounts > 0 && (
-              <p>Total varebaseret rabat: -{totalItemDiscounts.toFixed(2)} DKK</p>
+              <p>
+                Total varebaseret rabat: -{totalItemDiscounts.toFixed(2)} DKK
+              </p>
             )}
             {orderDiscount > 0 && (
               <p>Ordrebaseret rabat: -{orderDiscount.toFixed(2)} DKK</p>
             )}
             <p>Subtotal: {subtotal.toFixed(2)} DKK</p>
           </li>
-
         </ul>
       )}
     </div>
   );
 }
-
-
 
 export function App2() {
   const [products, setProducts] = React.useState([]);
@@ -189,17 +198,23 @@ export function App2() {
   const [isCartEmpty, setIsCartEmpty] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    fetch("/items.json")
-      .then((response) => response.json())
-      .then((data) => {
+    const fetchData = async () => {
+      setIsLoading(true);
+      try {
+        const response = await fetch("/items.json");
+        if (!response.ok) {
+          throw new Error("Network response was not ok.");
+        }
+        const data = await response.json();
         setProducts(data);
         setIsLoading(false);
-      })
-      .catch((error) => {
+      } catch (error) {
         console.error("Error fetching data:", error);
         setIsLoading(false);
-      });
+      }
+    };
+
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -240,8 +255,8 @@ export function App2() {
   };
 
   const updateQuantity = (productId, quantity) => {
-    setCart(prevCart => {
-      const updatedCart = prevCart.map(item =>
+    setCart((prevCart) => {
+      const updatedCart = prevCart.map((item) =>
         item.id === productId ? { ...item, quantity } : item
       );
       const totalPrice = calculateTotalPrice(updatedCart);
@@ -283,7 +298,7 @@ export function App2() {
 
   return (
     <div style={{ margin: -40 }}>
-       {isLoading && <div data-testid="loading-indicator">Indlæser...</div>}
+      {isLoading && <div data-testid="loading-indicator">Indlæser...</div>}
       <h1
         style={{
           maxWidth: "100%",
@@ -325,50 +340,49 @@ export function App2() {
 
       <h1 id="shopping-cart">Indkøbsvogn</h1>
 
-      <ShoppingCart cart={cart} removeFromCart={removeFromCart}
-        updateQuantity={updateQuantity} />
-      <h3>
-        Total pris: {totalPrice.toFixed(2)} DKK
-      </h3>
+      <ShoppingCart
+        cart={cart}
+        removeFromCart={removeFromCart}
+        updateQuantity={updateQuantity}
+      />
+      <h3>Total pris: {totalPrice.toFixed(2)} DKK</h3>
 
       <div
-
-
-
-  style={{
-    textAlign: "right",
-    marginRight: "150px",
-    marginTop: "80px",
-    marginBottom: "80px",
-  }}
->
-  <Link
-    to={!isCartEmpty ? {
-      pathname: "/checkout",
-      state: { productsInCart: cart }, 
-    } : null}
-  >
-    <button
-      style={{
-        backgroundColor: isCartEmpty ? "#ccc" : "green",
-        color: "white",
-        width: "125px",
-      }}
-      onClick={() => {
-        if (isCartEmpty) {
-          alert("Du skal vælge mindst én vare, før du kan gå til kassen.");
-        }
-      }}
-    >
-      Gå til kassen
-    </button>
-  </Link>
-</div>
-
-
-
-
-
+        style={{
+          textAlign: "right",
+          marginRight: "150px",
+          marginTop: "80px",
+          marginBottom: "80px",
+        }}
+      >
+        <Link
+          to={
+            !isCartEmpty
+              ? {
+                  pathname: "/checkout",
+                  state: { productsInCart: cart },
+                }
+              : ""
+          }
+        >
+          <button
+            style={{
+              backgroundColor: isCartEmpty ? "#ccc" : "green",
+              color: "white",
+              width: "125px",
+            }}
+            onClick={() => {
+              if (isCartEmpty) {
+                alert(
+                  "Du skal vælge mindst én vare, før du kan gå til kassen."
+                );
+              }
+            }}
+          >
+            Gå til kassen
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }
