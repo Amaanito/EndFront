@@ -4,5 +4,5 @@
 
 [[redirects]] # Dette opretter en redirect-regel, der sikrer, at alle stier leder til din index.html-fil
   from = "/*"
-  to = "/index.html"
+  to = "/Checkout"
   status = 200
