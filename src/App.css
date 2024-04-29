@@ -35,7 +35,7 @@
   }
 }
 
-.card {
+.card, .product-card {
   padding: 2em;
 }
 
@@ -79,22 +79,19 @@ body {
   justify-content: space-between;
 }
 
-.cart-item-description {
-  font-size: 1rem;
+.cart-item-description, .cart-item-price, .cart-item-name, .total-price,
+.cart-item-discount, .cart-item-final-total {
+  color: #fff;
   margin-bottom: 0.5rem;
 }
 
 .cart-item-name {
   font-weight: bold;
-  font-size: 1.2rem;
-  margin-bottom: 0.5rem;
-  color: #ffffff; /* Lys tekst for titler */
+  font-size: 1.5rem;
 }
 
 .cart-item-price {
-  font-size: 1rem;
   color: #bdbdbd; /* Lysere grå for priser og detaljer */
-  margin-bottom: 0.5rem;
 }
 
 .quantity-select {
@@ -120,22 +117,53 @@ body {
   background-color: #ff0000;
 }
 
-.total-price {
-  font-size: 1rem;
-  color: #ffffff; /* Lys tekst for total pris */
-  font-weight: bold;
-  margin-top: 0.5rem;
+/* Produkt liste og kort layout */
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
-.cart-item-discount {
-  color: #ff8c00; /* Stærk orange farve for rabatten */
-  font-size: 1.0rem; /* Forstørret skrift for rabatten */
-  margin-top: 1rem; /* Justeret så rabatten ligger lavere */
-  margin-bottom: -0.5rem; /* Trækker den op tættere på den totale pris, hvis nødvendig */
+.product-card {
+  box-sizing: border-box;
+  border: 3px solid #ccc;
+  padding: 1em; /* Ensartet padding */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  text-align: center;
+  margin: 10px;
 }
 
-.cart-item-final-total {
-  font-size: 1.2rem;
-  font-weight: bold;
-  margin-top: 0.25rem;
+.product-image {
+  max-width: 50%;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.product-name {
+  font-size: 2em; /* Forøget skriftstørrelse for navnet */
+  margin-bottom: 0.5em;
+  font-weight: bold; /* Tilføjet fed skrift */
+}
+
+.product-price {
+  font-size: 1.5em; /* Forøget skriftstørrelse for prisen */
+  margin-bottom: 1em;
+}
+
+/* Stilarter for 4 produkter pr. række på desktop */
+@media (min-width: 800px) {
+  .product-card {
+    width: calc(25% - 40px); /* Tilpasset for at sikre 4 produkter pr. række */
+    margin: 20px; /* Tilpasset margin for at sikre mellemrum */
+  }
+}
+
+/* Stilarter for 2 produkter pr. række på mobile enheder */
+@media (max-width: 799px) {
+  .product-card {
+    width: calc(50% - 40px); /* Tilpasset for at sikre 2 produkter pr. række */
+    margin: 20px; /* Ensartet margin med desktop-visning */
+  }
 }
