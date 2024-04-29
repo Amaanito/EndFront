@@ -287,7 +287,7 @@ export function App2() {
 
   return (
     <div style={{ margin: -40 }}>
-       {isLoading && <div data-testid="loading-indicator">Loading...</div>}
+       {isLoading && <div data-testid="loading-indicator">Indlæser...</div>}
       <h1
         style={{
           maxWidth: "100%",
@@ -349,7 +349,7 @@ export function App2() {
   <Link
     to={!isCartEmpty ? {
       pathname: "/checkout",
-      state: { productsInCart: cart }, // Overfør kurvens indhold som en del af state-objektet
+      state: { productsInCart: cart }, 
     } : null}
   >
     <button
