@@ -4,8 +4,8 @@ import { Helmet } from "react-helmet";
 
 export function ProductList({ products, addToCart, upsellNotification }) {
   const numProductsPerRow = 4;
-  const columnWidth = `calc(100% / ${numProductsPerRow} - 20px)`;
-  const marginRight = "20px";
+  const columnWidth = `calc(100% / ${numProductsPerRow} - 15px)`; // Reducerer marginen
+  const marginRight = "8px"; // Ændret margin
   const productHeight = "475px";
 
   return (
@@ -13,7 +13,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
       style={{
         display: "flex",
         flexWrap: "wrap",
-        justifyContent: "space-between",
+        justifyContent: "center", // Ændret justifyContent til "center"
         alignItems: "stretch",
       }}
     >
