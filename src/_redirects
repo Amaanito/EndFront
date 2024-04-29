@@ -1,5 +1,0 @@
-[[redirects]]
-  from = "/checkout/*"
-  to = "/checkout/index.html"
-  status = 200
-
