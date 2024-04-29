@@ -88,9 +88,7 @@ export function ProductList({ products, addToCart, upsellNotification }) {
 }
 
 export function CartItem({ item, removeFromCart, updateQuantity }) {
-  // Beregner totalen for hver vare baseret på pris og antal
-  const itemTotal = item.price * item.quantity;
-  
+  // Beregner totalen for hver vare baseret på pris og antal  
   // Beregner varebaseret rabat hvis betingelserne er opfyldt
   let itemDiscount = 0;
   if (item.quantity >= item.rebateQuantity && item.rebateQuantity > 0) {
@@ -98,7 +96,6 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
   }
 
   // Beregner den endelige total for varen efter rabat
-  const itemFinalTotal = itemTotal - itemDiscount;
 
   return (
     <div className="cart-item">
@@ -121,7 +118,7 @@ export function CartItem({ item, removeFromCart, updateQuantity }) {
         {itemDiscount > 0 && (
           <p className="cart-item-discount">Rabat: -{itemDiscount.toFixed(2)} kr.</p>
         )}
-        <p className="cart-item-final-total">Total: {itemFinalTotal.toFixed(2)} kr.</p>
+        
         <button 
           className="remove-button" 
           onClick={() => removeFromCart(item.id)}
@@ -148,10 +145,9 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
   }, 0);
 
   // Tjekker om subtotalen kvalificerer til en ordrebaseret rabat
-  const orderDiscount = subtotal > 300 ? subtotal * 0.1 : 0;
+  const orderDiscount = subtotal > 300 ? (subtotal - totalItemDiscounts) * 0.1 : 0;
 
   // Beregner den totale pris med alle rabatter
-  const total = subtotal - totalItemDiscounts - orderDiscount;
 
   return (
     <div>
@@ -175,7 +171,6 @@ export function ShoppingCart({ cart, removeFromCart, updateQuantity }) {
               <p>Ordrebaseret rabat: -{orderDiscount.toFixed(2)} DKK</p>
             )}
             <p>Subtotal: {subtotal.toFixed(2)} DKK</p>
-            <p className="order-total">Total: {total.toFixed(2)} DKK</p>
           </li>
 
         </ul>
@@ -251,8 +246,6 @@ export function App2() {
       );
     });
   };
-
-
   const calculateTotalPrice = (cart) => {
     let totalPrice = 0;
     cart.forEach((item) => {
@@ -330,9 +323,9 @@ export function App2() {
       <h1 id="shopping-cart">Indkøbsvogn</h1>
 
       <ShoppingCart cart={cart} removeFromCart={removeFromCart}
-        // Tilføj denne prop
         updateQuantity={updateQuantity} />
       <h3>
+        Total pris: {totalPrice.toFixed(2)} DKK
       </h3>
 
       <div

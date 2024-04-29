@@ -180,7 +180,7 @@ const Checkout = () => {
     });
 
     if (subtotal > 300) {
-      orderDiscount = subtotal * 0.1; // 10% order-based discount
+      orderDiscount = (subtotal - discountOver300) * 0.1; // 10% order-based discount
     }
 
     const totalPrice = subtotal - discountOver300 - orderDiscount;
