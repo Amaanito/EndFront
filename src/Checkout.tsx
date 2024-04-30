@@ -149,7 +149,7 @@ const Checkout = () => {
     };
     try {
       const response = await fetch(
-        /*"http://127.0.0.1:8000/gem-bruger/"*/ "https://eonz7flpdjy1og5.m.pipedream.net",
+        "http://localhost:3000/billing" /*"https://eonz7flpdjy1og5.m.pipedream.net"*/,
         {
           method: "POST",
           headers: {
