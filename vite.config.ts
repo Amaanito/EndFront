@@ -6,6 +6,6 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: '130.225.170.52', // Angiv den ønskede IP-adresse
-    port: 3000, // Angiv den ønskede port
+    port: 10180, // Angiv den ønskede port
   },
 })
