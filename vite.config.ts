@@ -7,11 +7,11 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 10181, 
-    hmr: {
+    /*hmr: {
       host: '130.225.170.52',
       port: 10181,
       clientPort: 10181 // Tilføj clientPort
-    },  
+    },*/  
   },
 
 })
