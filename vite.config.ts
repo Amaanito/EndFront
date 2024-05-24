@@ -10,6 +10,7 @@ export default defineConfig({
     hmr: {
       host: '130.225.170.52',
       port: 10181,
+      clientPort: 10181 // Tilføj clientPort
     },  
   },
 
