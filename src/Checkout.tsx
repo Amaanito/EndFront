@@ -149,7 +149,7 @@ const Checkout = () => {
     };
     try {
       const response = await fetch(
-        "http://localhost:3000/billing" /*"https://eonz7flpdjy1og5.m.pipedream.net"*/,
+        "http://130.225.170.52/api/billing",
         {
           method: "POST",
           headers: {
