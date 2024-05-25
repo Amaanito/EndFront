@@ -209,7 +209,7 @@ const Checkout = () => {
             value={deliveryAddress.name}
             onChange={handleInputChange}
             style={{ width: "305px", height: "20px", marginBottom: "10px" }}
-            pattern="^[A-Za-z\s'-]+$"
+            //pattern="^[A-Za-z\s'-]+$"
             title="Navnet må kun indeholde bogstaver."
           />
         </div>
