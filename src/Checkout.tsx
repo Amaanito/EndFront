@@ -164,7 +164,7 @@ const Checkout = () => {
     };
     try {
       const response = await fetch(
-        "http://localhost/api/",
+        "http://130.225.170.52:3000/api/",
         {
           method: "POST",
           headers: {
