@@ -142,10 +142,25 @@ const Checkout = () => {
       companyName: deliveryAddress.companyName,
       vatNumber: deliveryAddress.vatNumber,
       orderComment: e.target.orderComment.value,
-      termsAccepted,
-      marketingAccepted,
-      productsInCart,
-      totalPriceInfo,
+      termsAccepted: termsAccepted,
+      marketingAccepted: marketingAccepted,
+      productsInCart: productsInCart.map(product => ({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        currency: product.currency,
+        quantity: product.quantity,
+        rebatePercent: product.rebatePercent || 0,
+        rebateQuantity: product.rebateQuantity || 0,
+        upsellProductId: product.upsellProductId || '',
+        imageUrl: product.imageUrl || ''
+      })),
+      totalPriceInfo: [{
+        discountOver300: totalPriceInfo.discountOver300,
+        orderDiscount: totalPriceInfo.orderDiscount,
+        subtotal: totalPriceInfo.subtotal,
+        totalPrice: totalPriceInfo.totalPrice
+      }]
     };
     try {
       const response = await fetch(
@@ -170,6 +185,7 @@ const Checkout = () => {
       console.error("There was a problem with sending data:", error);
     }
   };
+
   const calculateTotalPrice = (cart) => {
     if (!cart || cart.length === 0) {
       return {
