@@ -164,7 +164,7 @@ const Checkout = () => {
     };
     try {
       const response = await fetch(
-        "http://localhost/api/billing",
+        "http://localhost/api/",
         {
           method: "POST",
           headers: {
